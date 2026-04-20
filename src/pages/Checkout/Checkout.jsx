@@ -1,10 +1,10 @@
 // src/pages/Checkout/Checkout.jsx
-import { useState, useEffect }  from 'react';
-import { useNavigate }          from 'react-router-dom';
-import { useCart }              from '../../context/CartContext';
-import { useAuth }              from '../../context/AuthContext';
-import orderService             from '../../services/orderService';
-import { formatPrice }          from '../../utils/formatPrice';
+import { useState, useEffect, useCallback } from 'react';
+import { useNavigate }                       from 'react-router-dom';
+import { useCart }                           from '../../context/CartContext';
+import { useAuth }                           from '../../context/AuthContext';
+import orderService                          from '../../services/orderService';
+import { formatPrice }                       from '../../utils/formatPrice';
 import {
   FaLock, FaMapMarkerAlt, FaEdit,
   FaCreditCard, FaUserPlus,
@@ -63,31 +63,26 @@ const PAYMENT_METHODS = [
 
 // ── Country list ───────────────────────────────────────────────────────
 const COUNTRIES = [
-  { v: 'PK', l: '🇵🇰 Pakistan'            },
-  { v: 'CA', l: '🇨🇦 Canada'              },
-  { v: 'GB', l: '🇬🇧 United Kingdom'      },
-  { v: 'AU', l: '🇦🇺 Australia'           },
-  { v: 'US', l: '🇺🇸 United States'       },
-  { v: 'IN', l: '🇮🇳 India'               },
-  { v: 'DE', l: '🇩🇪 Germany'             },
-  { v: 'FR', l: '🇫🇷 France'              },
-  { v: 'IT', l: '🇮🇹 Italy'               },
-  { v: 'ES', l: '🇪🇸 Spain'               },
-  { v: 'BR', l: '🇧🇷 Brazil'              },
-  { v: 'RU', l: '🇷🇺 Russia'              },
-  { v: 'JP', l: '🇯🇵 Japan'               },
-  { v: 'KR', l: '🇰🇷 South Korea'         },
-  { v: 'CN', l: '🇨🇳 China'               },
-  { v: 'SA', l: '🇸🇦 Saudi Arabia'        },
-  { v: 'AE', l: '🇦🇪 United Arab Emirates'},
+  { v: 'PK', l: '🇵🇰 Pakistan'             },
+  { v: 'CA', l: '🇨🇦 Canada'               },
+  { v: 'GB', l: '🇬🇧 United Kingdom'       },
+  { v: 'AU', l: '🇦🇺 Australia'            },
+  { v: 'US', l: '🇺🇸 United States'        },
+  { v: 'IN', l: '🇮🇳 India'                },
+  { v: 'DE', l: '🇩🇪 Germany'              },
+  { v: 'FR', l: '🇫🇷 France'               },
+  { v: 'IT', l: '🇮🇹 Italy'                },
+  { v: 'ES', l: '🇪🇸 Spain'                },
+  { v: 'BR', l: '🇧🇷 Brazil'               },
+  { v: 'RU', l: '🇷🇺 Russia'               },
+  { v: 'JP', l: '🇯🇵 Japan'                },
+  { v: 'KR', l: '🇰🇷 South Korea'          },
+  { v: 'CN', l: '🇨🇳 China'                },
+  { v: 'SA', l: '🇸🇦 Saudi Arabia'         },
+  { v: 'AE', l: '🇦🇪 United Arab Emirates' },
 ];
 
 // ── Helper: extract structured address from user.address ───────────────
-/*
- * user.address is now stored as an object: { street, city, state, zipCode, country }
- * This helper normalizes it for the ship state, handling both the new
- * structured format and legacy flat-string format.
- */
 function extractAddress(user) {
   if (!user) return { address: '', city: '', state: '', zipCode: '', country: 'PK' };
 
@@ -101,7 +96,6 @@ function extractAddress(user) {
     };
   }
 
-  // Legacy: flat string stored in address
   return {
     address: user.address || '',
     city:    '',
@@ -111,10 +105,58 @@ function extractAddress(user) {
   };
 }
 
+// ─────────────────────────────────────────────────────────────────────
+// ✅ FIX #1: F (FormField) is defined at MODULE LEVEL — outside Checkout.
+//
+// WHY THIS FIXES THE BUG:
+//   Before: const F = () => ... was inside Checkout(), so React got a
+//   brand-new component type on every render → unmount + remount → lost focus.
+//
+//   Now: F is a stable reference that never changes between renders.
+//   React correctly reuses the existing DOM input and focus is preserved.
+// ─────────────────────────────────────────────────────────────────────
+function F({ label, name, type = 'text', value, onChange, ph, half, opts, errors, req = true }) {
+  return (
+    <div className={half ? 'col-md-6' : 'col-12'}>
+      <label className="form-label small fw-semibold">
+        {label} {req && <span className="text-danger">*</span>}
+      </label>
+
+      {opts ? (
+        <select
+          name={name}
+          className={`form-select ${errors[name] ? 'is-invalid' : ''}`}
+          value={value}
+          onChange={onChange}
+        >
+          {opts.map((o) => (
+            <option key={o.v} value={o.v}>
+              {o.l}
+            </option>
+          ))}
+        </select>
+      ) : (
+        <input
+          type={type}
+          name={name}
+          className={`form-control ${errors[name] ? 'is-invalid' : ''}`}
+          placeholder={ph}
+          value={value}
+          onChange={onChange}
+        />
+      )}
+
+      {errors[name] && (
+        <div className="invalid-feedback">{errors[name]}</div>
+      )}
+    </div>
+  );
+}
+
 // ── Component ──────────────────────────────────────────────────────────
 export default function Checkout() {
   const navigate = useNavigate();
-  const { cartItems, totalPrice, clearCart } = useCart();
+  const { cartItems, totalPrice, clearCart }          = useCart();
   const { user, isAuthenticated, register, login, updateUser } = useAuth();
 
   const [step,         setStep]         = useState(1);
@@ -127,15 +169,10 @@ export default function Checkout() {
 
   const [paymentMethod, setPaymentMethod] = useState('card');
 
-  /*
-   * ✅ ADDRESS SYNC:
-   * ship state is initialized from the logged-in user's profile.
-   * extractAddress() handles both structured and legacy flat address.
-   */
   const [ship, setShip] = useState(() => {
     const addr = extractAddress(user);
     return {
-      firstName: user?.name?.split(' ')[0] || '',
+      firstName: user?.name?.split(' ')[0]                || '',
       lastName:  user?.name?.split(' ').slice(1).join(' ') || '',
       email:     user?.email   || '',
       phone:     user?.phone   || '',
@@ -147,13 +184,6 @@ export default function Checkout() {
     };
   });
 
-  /*
-   * ✅ EDIT ADDRESS TOGGLE
-   * When isAuthenticated, address is pre-filled from profile (locked view).
-   * User can click "Edit" to override for this order only.
-   * editAddress = false → show locked pre-filled address
-   * editAddress = true  → show editable fields
-   */
   const [editAddress, setEditAddress] = useState(false);
 
   const [pay, setPay] = useState({
@@ -173,13 +203,13 @@ export default function Checkout() {
   const grandTotal = round(totalPrice + shipping + tax);
 
   // ── Field handlers ─────────────────────────────────────────────────
-  const onShipChange = (e) => {
+  const onShipChange = useCallback((e) => {
     const { name, value } = e.target;
     setShip((p) => ({ ...p, [name]: value }));
-    if (errors[name]) setErrors((p) => ({ ...p, [name]: '' }));
-  };
+    setErrors((p) => (p[name] ? { ...p, [name]: '' } : p));
+  }, []);
 
-  const onPayChange = (e) => {
+  const onPayChange = useCallback((e) => {
     let { name, value } = e.target;
     if (name === 'cardNumber')
       value = value.replace(/\D/g, '').slice(0, 16)
@@ -190,8 +220,8 @@ export default function Checkout() {
     if (name === 'cvv')
       value = value.replace(/\D/g, '').slice(0, 4);
     setPay((p) => ({ ...p, [name]: value }));
-    if (errors[name]) setErrors((p) => ({ ...p, [name]: '' }));
-  };
+    setErrors((p) => (p[name] ? { ...p, [name]: '' } : p));
+  }, []);
 
   // ── Validation ─────────────────────────────────────────────────────
   const validateStep1 = () => {
@@ -233,17 +263,12 @@ export default function Checkout() {
 
       let currentUser = user;
 
-      /*
-       * ✅ GUEST AUTO-REGISTRATION with structured address
-       * Address entered in the checkout form is saved to the new profile.
-       */
       if (!isAuthenticated && authMode === 'guest') {
         const { user: newUser } = register({
           name:     `${ship.firstName} ${ship.lastName}`,
           email:    ship.email,
           password: autoPassword,
           phone:    ship.phone,
-          // ✅ Pass structured address — register() handles normalization
           address: {
             street:  ship.address,
             city:    ship.city,
@@ -256,11 +281,6 @@ export default function Checkout() {
         currentUser = newUser;
       }
 
-      /*
-       * ✅ ADDRESS SYNC FOR LOGGED-IN USERS:
-       * If user edited their address for this order, save it back to profile.
-       * This ensures profile stays current with latest shipping address used.
-       */
       if (isAuthenticated && editAddress) {
         updateUser({
           address: {
@@ -322,33 +342,27 @@ export default function Checkout() {
     }
   };
 
-  // ── Reusable field component ───────────────────────────────────────
-  const F = ({ label, name, type = 'text', value, onChange, ph, half, opts, req = true }) => (
-    <div className={half ? 'col-md-6' : 'col-12'}>
-      <label className="form-label small fw-semibold">
-        {label} {req && <span className="text-danger">*</span>}
-      </label>
-      {opts
-        ? <select
-            name={name}
-            className={`form-select ${errors[name] ? 'is-invalid' : ''}`}
-            value={value}
-            onChange={onChange}
-          >
-            {opts.map((o) => <option key={o.v} value={o.v}>{o.l}</option>)}
-          </select>
-        : <input
-            type={type}
-            name={name}
-            className={`form-control ${errors[name] ? 'is-invalid' : ''}`}
-            placeholder={ph}
-            value={value}
-            onChange={onChange}
-          />
-      }
-      {errors[name] && <div className="invalid-feedback">{errors[name]}</div>}
-    </div>
-  );
+  // ─────────────────────────────────────────────────────────────────
+  // ✅ FIX #2: useCallback stabilises onSuccess so InlineLogin does
+  //    not receive a new prop reference on every Checkout re-render.
+  // ─────────────────────────────────────────────────────────────────
+  const handleLoginSuccess = useCallback((u, t) => {
+    login(u, t);
+    setAuthMode('existing');
+    const addr = extractAddress(u);
+    setShip((prev) => ({
+      ...prev,
+      firstName: u.name?.split(' ')[0]                || prev.firstName,
+      lastName:  u.name?.split(' ').slice(1).join(' ') || prev.lastName,
+      email:     u.email   || prev.email,
+      phone:     u.phone   || prev.phone,
+      address:   addr.address || prev.address,
+      city:      addr.city    || prev.city,
+      state:     addr.state   || prev.state,
+      zipCode:   addr.zipCode || prev.zipCode,
+      country:   addr.country || prev.country,
+    }));
+  }, [login]);
 
   // ── Render ─────────────────────────────────────────────────────────
   return (
@@ -360,7 +374,7 @@ export default function Checkout() {
           <FaLock className="me-1" />Secure, encrypted checkout
         </p>
 
-        {/* ── Step indicator ──────────────────────────────────────── */}
+        {/* ── Step indicator ───────────────────────────────────────── */}
         <div className={styles.steps}>
           {[
             { n: 1, label: 'Your Info' },
@@ -379,12 +393,12 @@ export default function Checkout() {
         <form onSubmit={handleSubmit}>
           <div className="row g-4 mt-1">
 
-            {/* ── LEFT — Form ─────────────────────────────────────── */}
+            {/* ── LEFT — Form ──────────────────────────────────────── */}
             <div className="col-lg-7">
 
-              {/* ════════════════════════════════════════════════════
-                  STEP 1: Contact & Shipping Info
-              ════════════════════════════════════════════════════ */}
+              {/* ══════════════════════════════════════════════════════
+                  STEP 1 : Contact & Shipping Info
+              ══════════════════════════════════════════════════════ */}
               {step === 1 && (
                 <div className={`card border-0 shadow-sm ${styles.formCard}`}>
                   <div className="card-header bg-white py-3 fw-bold">
@@ -404,7 +418,9 @@ export default function Checkout() {
                           <button
                             type="button"
                             className={`btn btn-sm flex-grow-1 ${
-                              authMode === 'guest' ? 'btn-primary' : 'btn-outline-secondary'
+                              authMode === 'guest'
+                                ? 'btn-primary'
+                                : 'btn-outline-secondary'
                             }`}
                             onClick={() => setAuthMode('guest')}
                           >
@@ -415,7 +431,9 @@ export default function Checkout() {
                           <button
                             type="button"
                             className={`btn btn-sm flex-grow-1 ${
-                              authMode === 'login' ? 'btn-primary' : 'btn-outline-secondary'
+                              authMode === 'login'
+                                ? 'btn-primary'
+                                : 'btn-outline-secondary'
                             }`}
                             onClick={() => setAuthMode('login')}
                           >
@@ -423,6 +441,7 @@ export default function Checkout() {
                             Sign In
                           </button>
                         </div>
+
                         {authMode === 'guest' && (
                           <div className="alert alert-info py-2 small mt-3 mb-0">
                             <FaUserPlus className="me-2" />
@@ -430,54 +449,29 @@ export default function Checkout() {
                             your details. Your password will be shown after checkout.
                           </div>
                         )}
+
+                        {/* ✅ FIX #2 applied here — stable callback reference */}
                         {authMode === 'login' && (
-                          <InlineLogin
-                            onSuccess={(u, t) => {
-                              login(u, t);
-                              setAuthMode('existing');
-                              const addr = extractAddress(u);
-                              setShip((prev) => ({
-                                ...prev,
-                                firstName: u.name?.split(' ')[0]                || prev.firstName,
-                                lastName:  u.name?.split(' ').slice(1).join(' ') || prev.lastName,
-                                email:     u.email   || prev.email,
-                                phone:     u.phone   || prev.phone,
-                                address:   addr.address || prev.address,
-                                city:      addr.city    || prev.city,
-                                state:     addr.state   || prev.state,
-                                zipCode:   addr.zipCode || prev.zipCode,
-                                country:   addr.country || prev.country,
-                              }));
-                            }}
-                          />
+                          <InlineLogin onSuccess={handleLoginSuccess} />
                         )}
                       </div>
                     )}
 
-                    {/* Contact fields (always shown) */}
+                    {/* Contact fields */}
                     <div className="row g-3">
                       <F label="First Name" name="firstName" value={ship.firstName}
-                         onChange={onShipChange} ph="First Name" half />
+                         onChange={onShipChange} ph="First Name" half errors={errors} />
                       <F label="Last Name"  name="lastName"  value={ship.lastName}
-                         onChange={onShipChange} ph="Last Name" half />
+                         onChange={onShipChange} ph="Last Name"  half errors={errors} />
                       <F label="Email"      name="email"     value={ship.email}
-                         onChange={onShipChange} ph="you@example.com" type="email" />
+                         onChange={onShipChange} ph="you@example.com"
+                         type="email" errors={errors} />
                       <F label="Phone"      name="phone"     value={ship.phone}
-                         onChange={onShipChange} ph="+92 300 1234567" type="tel" req={false} />
+                         onChange={onShipChange} ph="+92 300 1234567"
+                         type="tel" req={false} errors={errors} />
                     </div>
 
-                    {/*
-                     * ✅ ADDRESS SECTION WITH EDIT TOGGLE
-                     *
-                     * LOGGED-IN USERS:
-                     *   - Default: pre-filled address shown in a locked "display" box
-                     *   - Edit button → reveals editable fields
-                     *   - Edited address saved back to profile on order submit
-                     *
-                     * GUESTS:
-                     *   - Always show editable fields (no profile to pre-fill)
-                     *   - Address is saved to auto-created profile on submit
-                     */}
+                    {/* Address section */}
                     <div className="mt-3">
                       <div className="d-flex align-items-center justify-content-between mb-2">
                         <label className="form-label small fw-semibold mb-0">
@@ -485,7 +479,6 @@ export default function Checkout() {
                           Shipping Address <span className="text-danger">*</span>
                         </label>
 
-                        {/* Edit toggle — only for logged-in users with existing address */}
                         {isAuthenticated && (
                           <button
                             type="button"
@@ -504,17 +497,15 @@ export default function Checkout() {
                         )}
                       </div>
 
-                      {/*
-                       * LOCKED VIEW — logged-in + not editing
-                       * Shows profile address with a map pin style
-                       */}
+                      {/* Locked address view */}
                       {isAuthenticated && !editAddress && (
                         <div className={styles.addressLocked}>
                           <FaMapMarkerAlt className={styles.addressLockedPin} />
                           <div className="flex-grow-1">
                             {ship.address || ship.city ? (
                               <p className="mb-0 small fw-semibold lh-sm">
-                                {[ship.address, ship.city, ship.state, ship.zipCode, ship.country]
+                                {[ship.address, ship.city, ship.state,
+                                  ship.zipCode, ship.country]
                                   .filter(Boolean).join(', ')}
                               </p>
                             ) : (
@@ -526,21 +517,20 @@ export default function Checkout() {
                         </div>
                       )}
 
-                      {/* EDITABLE FIELDS — guests always, or logged-in + editing */}
+                      {/* Editable address fields */}
                       {(!isAuthenticated || editAddress) && (
                         <div className={`row g-3 ${styles.addressEditFields}`}>
                           <F label="Street Address" name="address" value={ship.address}
-                             onChange={onShipChange} ph="123 Main Street" />
+                             onChange={onShipChange} ph="123 Main Street" errors={errors} />
                           <F label="City"     name="city"    value={ship.city}
-                             onChange={onShipChange} ph="City"     half />
+                             onChange={onShipChange} ph="City"     half errors={errors} />
                           <F label="State"    name="state"   value={ship.state}
-                             onChange={onShipChange} ph="State"    half />
+                             onChange={onShipChange} ph="State"    half errors={errors} />
                           <F label="ZIP Code" name="zipCode" value={ship.zipCode}
-                             onChange={onShipChange} ph="ZIP Code" half />
+                             onChange={onShipChange} ph="ZIP Code" half errors={errors} />
                           <F label="Country"  name="country" value={ship.country}
-                             onChange={onShipChange} half opts={COUNTRIES} />
+                             onChange={onShipChange} half opts={COUNTRIES} errors={errors} />
 
-                          {/* Save-back notice for logged-in users */}
                           {isAuthenticated && editAddress && (
                             <div className="col-12">
                               <p className={styles.addrSaveNotice}>
@@ -554,7 +544,7 @@ export default function Checkout() {
 
                     <button
                       type="button"
-                      className="btn btn-primary  mt-4  fw-bold justify-content-center"
+                      className="btn btn-primary mt-4 fw-bold justify-content-center"
                       onClick={() => validateStep1() && setStep(2)}
                       disabled={authMode === 'login' && !isAuthenticated}
                     >
@@ -564,9 +554,9 @@ export default function Checkout() {
                 </div>
               )}
 
-              {/* ════════════════════════════════════════════════════
-                  STEP 2: Payment
-              ════════════════════════════════════════════════════ */}
+              {/* ══════════════════════════════════════════════════════
+                  STEP 2 : Payment
+              ══════════════════════════════════════════════════════ */}
               {step === 2 && (
                 <div className={`card border-0 shadow-sm ${styles.formCard}`}>
                   <div className="card-header bg-white py-3 fw-bold d-flex
@@ -590,7 +580,10 @@ export default function Checkout() {
                     </p>
 
                     <div className={styles.payCardList}>
-                      {PAYMENT_METHODS.map(({ id, label, icon: Icon, description, badge, badgeColor, bullet }) => {
+                      {PAYMENT_METHODS.map(({
+                        id, label, icon: Icon,
+                        description, badge, badgeColor, bullet,
+                      }) => {
                         const isSelected = paymentMethod === id;
                         return (
                           <button
@@ -599,31 +592,39 @@ export default function Checkout() {
                             onClick={() => {
                               setPaymentMethod(id);
                               setErrors((prev) => {
-                                const { cardName, cardNumber, expiry, cvv, ...rest } = prev;
+                                const {
+                                  cardName, cardNumber, expiry, cvv, ...rest
+                                } = prev;
                                 return rest;
                               });
                             }}
-                            className={`${styles.payCard} ${isSelected ? styles.payCardSelected : ''}`}
+                            className={`${styles.payCard} ${
+                              isSelected ? styles.payCardSelected : ''
+                            }`}
                             aria-pressed={isSelected}
                           >
-                            <div className={`${styles.payCardIconZone} ${isSelected ? styles.payCardIconZoneSelected : ''}`}>
+                            <div className={`${styles.payCardIconZone} ${
+                              isSelected ? styles.payCardIconZoneSelected : ''
+                            }`}>
                               <Icon className={styles.payCardIcon} />
                             </div>
                             <div className={styles.payCardBody}>
                               <div className={styles.payCardTitleRow}>
                                 <span className={styles.payCardTitle}>{label}</span>
                                 {badge && (
-                                  <span className={`${styles.payCardBadge} ${styles[`payCardBadge_${badgeColor}`]}`}>
+                                  <span className={`${styles.payCardBadge} ${
+                                    styles[`payCardBadge_${badgeColor}`]
+                                  }`}>
                                     {badge}
                                   </span>
                                 )}
                               </div>
                               <span className={styles.payCardDesc}>{description}</span>
                               <span className={styles.payCardBullet}>
-                                {id === 'card'   && <FaShieldAlt   className={styles.bulletIcon} />}
-                                {id === 'paypal' && <FaPaypal       className={styles.bulletIcon} />}
-                                {id === 'bank'   && <FaClock        className={styles.bulletIcon} />}
-                                {id === 'cod'    && <FaCheckCircle  className={styles.bulletIcon} />}
+                                {id === 'card'   && <FaShieldAlt  className={styles.bulletIcon} />}
+                                {id === 'paypal' && <FaPaypal      className={styles.bulletIcon} />}
+                                {id === 'bank'   && <FaClock       className={styles.bulletIcon} />}
+                                {id === 'cod'    && <FaCheckCircle className={styles.bulletIcon} />}
                                 {bullet}
                               </span>
                             </div>
@@ -638,13 +639,21 @@ export default function Checkout() {
                       })}
                     </div>
 
-                    {/* ── Card fields ───────────────────────────────── */}
+                    {/* Card fields */}
                     {paymentMethod === 'card' && (
                       <div className={`row g-3 mt-1 ${styles.cardFields}`}>
-                        <F label="Name on Card"   name="cardName"   value={pay.cardName}   onChange={onPayChange} ph="John Doe" />
-                        <F label="Card Number"    name="cardNumber" value={pay.cardNumber} onChange={onPayChange} ph="1234 5678 9012 3456" />
-                        <F label="Expiry (MM/YY)" name="expiry"     value={pay.expiry}     onChange={onPayChange} ph="MM/YY" half />
-                        <F label="CVV"            name="cvv"        value={pay.cvv}        onChange={onPayChange} ph="•••" half type="password" />
+                        <F label="Name on Card"   name="cardName"
+                           value={pay.cardName}   onChange={onPayChange}
+                           ph="John Doe"          errors={errors} />
+                        <F label="Card Number"    name="cardNumber"
+                           value={pay.cardNumber} onChange={onPayChange}
+                           ph="1234 5678 9012 3456" errors={errors} />
+                        <F label="Expiry (MM/YY)" name="expiry"
+                           value={pay.expiry}     onChange={onPayChange}
+                           ph="MM/YY" half        errors={errors} />
+                        <F label="CVV"            name="cvv"
+                           value={pay.cvv}        onChange={onPayChange}
+                           ph="•••" half type="password" errors={errors} />
                         <div className="col-12">
                           <p className="text-muted small mb-0">
                             🔒 Your card details are encrypted and never stored.
@@ -653,7 +662,6 @@ export default function Checkout() {
                       </div>
                     )}
 
-                    {/* ── PayPal info ───────────────────────────────── */}
                     {paymentMethod === 'paypal' && (
                       <div className={`alert alert-info mt-3 mb-0 ${styles.methodInfo}`}>
                         <FaPaypal className="me-2 fs-5 flex-shrink-0" />
@@ -667,15 +675,12 @@ export default function Checkout() {
                       </div>
                     )}
 
-                    {/* ── Bank Transfer details ─────────────────────── */}
                     {paymentMethod === 'bank' && (
                       <div className={`alert alert-warning mt-3 mb-0 ${styles.methodInfo}`}>
                         <FaUniversity className="me-2 fs-5 flex-shrink-0" />
                         <div>
                           <strong>Bank Transfer Details</strong>
-                          <p className="small mb-1 mt-1">
-                            Transfer the exact order amount to:
-                          </p>
+                          <p className="small mb-1 mt-1">Transfer the exact order amount to:</p>
                           <ul className="small mb-0 ps-3">
                             <li><strong>Bank:</strong> First National Bank</li>
                             <li><strong>Account Name:</strong> MyStore Inc.</li>
@@ -689,7 +694,6 @@ export default function Checkout() {
                       </div>
                     )}
 
-                    {/* ── COD confirmation ──────────────────────────── */}
                     {paymentMethod === 'cod' && (
                       <div className={`alert alert-success mt-3 mb-0 ${styles.methodInfo}`}>
                         <FaMoneyBillWave className="me-2 fs-5 flex-shrink-0" />
@@ -703,18 +707,20 @@ export default function Checkout() {
                       </div>
                     )}
 
-                    {/* ── Action buttons ────────────────────────────── */}
+                    {/* Action buttons */}
                     <div className="d-flex gap-3 mt-4">
                       <button
                         type="button"
-                        className="btn btn-outline-secondary fw-bold"style={{width:"20%", height:"40px"}}
+                        className="btn btn-outline-secondary fw-bold"
+                        style={{ width: '20%', height: '40px' }}
                         onClick={() => setStep(1)}
                       >
                         ← Back
                       </button>
                       <button
-                        type="submit" style={{width:"40%", height:"40px"}}
-                        className={`btn btn-success fw-bold   ${styles.placeBtn}` }
+                        type="submit"
+                        className={`btn btn-success fw-bold ${styles.placeBtn}`}
+                        style={{ width: '40%', height: '40px' }}
                         disabled={isSubmitting}
                       >
                         {isSubmitting ? (
@@ -726,12 +732,12 @@ export default function Checkout() {
                           <>
                             <FaLock className="me-2" />
                             {paymentMethod === 'cod'
-                              ? ' Pay on Delivery'
+                              ? 'Pay on Delivery'
                               : paymentMethod === 'bank'
-                              ? ' Pay via Bank Transfer'
+                              ? 'Pay via Bank Transfer'
                               : paymentMethod === 'paypal'
-                              ? ' Continue to PayPal'
-                              : `  ${formatPrice(grandTotal)}`
+                              ? 'Continue to PayPal'
+                              : formatPrice(grandTotal)
                             }
                           </>
                         )}
@@ -743,7 +749,7 @@ export default function Checkout() {
               )}
             </div>
 
-            {/* ── RIGHT — Order Review ─────────────────────────────── */}
+            {/* ── RIGHT — Order Review ──────────────────────────────── */}
             <div className="col-lg-5">
               <div className={`card border-0 shadow-sm ${styles.reviewCard}`}>
                 <div className="card-header bg-white py-3 fw-bold">
@@ -805,6 +811,7 @@ export default function Checkout() {
 }
 
 // ── Inline Login ───────────────────────────────────────────────────────
+// ✅ Already correctly defined outside Checkout — no change needed here.
 function InlineLogin({ onSuccess }) {
   const { login } = useAuth();
   const [form,  setForm]  = useState({ email: '', password: '' });
@@ -842,14 +849,24 @@ function InlineLogin({ onSuccess }) {
       <p className="fw-semibold small mb-2">Sign in to your account:</p>
       {error && <div className="alert alert-danger py-2 small">{error}</div>}
       <div className="mb-2">
-        <input type="email" className="form-control form-control-sm"
-               placeholder="Email" value={form.email}
-               onChange={(e) => setForm((p) => ({ ...p, email: e.target.value }))} required />
+        <input
+          type="email"
+          className="form-control form-control-sm"
+          placeholder="Email"
+          value={form.email}
+          onChange={(e) => setForm((p) => ({ ...p, email: e.target.value }))}
+          required
+        />
       </div>
       <div className="mb-2">
-        <input type="password" className="form-control form-control-sm"
-               placeholder="Password" value={form.password}
-               onChange={(e) => setForm((p) => ({ ...p, password: e.target.value }))} required />
+        <input
+          type="password"
+          className="form-control form-control-sm"
+          placeholder="Password"
+          value={form.password}
+          onChange={(e) => setForm((p) => ({ ...p, password: e.target.value }))}
+          required
+        />
       </div>
       <button type="submit" className="btn btn-primary btn-sm w-100" disabled={busy}>
         {busy ? <span className="spinner-border spinner-border-sm" /> : 'Sign In'}
