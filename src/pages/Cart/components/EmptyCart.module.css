@@ -1,0 +1,7 @@
+.wrap { min-height: 60vh; display: flex; flex-direction: column;
+        align-items: center; justify-content: center; }
+.icon { font-size: 5rem; animation: bounce 1.2s ease infinite; margin-bottom: 1rem; }
+@keyframes bounce {
+  0%,100% { transform: translateY(0);     }
+  50%      { transform: translateY(-16px); }
+}

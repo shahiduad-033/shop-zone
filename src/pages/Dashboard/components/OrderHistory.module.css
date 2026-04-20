@@ -1,0 +1,76 @@
+/* src/pages/Dashboard/components/OrderHistory.module.css */
+
+/* ── Order row ──────────────────────────────────────────────── */
+.orderRow {
+  border-bottom: 1px solid #f3f4f6;
+  transition: background 0.15s ease;
+}
+.orderRow:last-child { border-bottom: none; }
+.orderRow:hover { background: #fafafa; }
+
+/* ── Order header (clickable summary row) ───────────────────── */
+.orderHeader {
+  cursor: pointer;
+  user-select: none;
+}
+.orderHeader:hover { background: #f9fafb; }
+
+/* ── Expanded detail panel ──────────────────────────────────── */
+.orderDetail {
+  background: #fdfdfd;
+  border-top: 1px solid #f3f4f6;
+  animation: slideDown 0.22s ease forwards;
+}
+
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-6px); }
+  to   { opacity: 1; transform: translateY(0);    }
+}
+
+/* ── Order footer (price + address + payment) ───────────────── */
+.orderFooter {
+  background: #f9fafb;
+  border-radius: 0 0 14px 14px;
+}
+
+/* ── Item thumbnail ─────────────────────────────────────────── */
+.orderItem { border-bottom: 1px solid #f9fafb; padding-bottom: 8px; }
+.orderItem:last-child { border-bottom: none; padding-bottom: 0; }
+
+.itemThumb {
+  width: 46px; height: 46px; min-width: 46px;
+  border: 1px solid #e5e7eb; border-radius: 8px;
+  background: #fff; padding: 4px;
+  display: flex; align-items: center; justify-content: center;
+  overflow: hidden;
+}
+.itemThumb img {
+  max-width: 100%; max-height: 100%;
+  object-fit: contain;
+}
+
+/* ── Cancel button ──────────────────────────────────────────── */
+.cancelBtn {
+  font-size: 0.75rem;
+  padding: 3px 10px;
+  border-radius: 6px;
+  white-space: nowrap;
+  flex-shrink: 0;
+  transition: all 0.2s ease;
+}
+.cancelBtn:hover:not(:disabled) {
+  background: #ef4444;
+  color: #fff;
+}
+
+/* ── Payment method badge ────────────────────────────────────── */
+.payMethodBadge {
+  display: inline-block;
+  background: #eff6ff;
+  color: #1d4ed8;
+  border: 1px solid #bfdbfe;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 3px 10px;
+}

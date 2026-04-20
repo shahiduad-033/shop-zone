@@ -1,0 +1,3 @@
+.page     { background: #f9fafb; min-height: 100vh; }
+.cartCard { border-radius: 14px; overflow: hidden; }
+.sticky   { position: sticky; top: 80px; }

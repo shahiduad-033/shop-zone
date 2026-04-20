@@ -1,0 +1,19 @@
+.page {
+  background: #f9fafb;
+  min-height: 80vh;
+  display: flex;
+  align-items: center;
+}
+
+.code {
+  font-size: 7rem;
+  font-weight: 900;
+  color: #e5e7eb;
+  line-height: 1;
+  letter-spacing: -4px;
+}
+
+.emoji {
+  font-size: 3.5rem;
+  margin: -10px 0 12px;
+}

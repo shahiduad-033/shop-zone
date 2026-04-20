@@ -1,0 +1,620 @@
+CODE 1
+import React from 'react';
+import { Link } from 'react-router-dom';
+import styles from './FlashSaleSection.module.css';
+import StarRating from '../../../../components/common/StarRating/StarRating'; // Adjust path if StarRating is shared
+import { formatPrice } from '../../../../utils/formatPrice';
+
+// Dummy Data for Flash Sale (You can replace this with Real API call later)
+const FLASH_SALE_PRODUCTS = [
+  { id: 101, title: "Wireless Pro Headphones", price: 79.99, comparePrice: 129.99, image: "https://fakestoreapi.com/img/81QpkIbqLIW._AC_UY879_.jpg", rating: 4.2 },
+  { id: 102, title: "Smart Fitness Watch", price: 45.50, comparePrice: 89.99, image: "https://fakestoreapi.com/img/71li-ujtlUL._AC_UY879_.jpg", rating: 3.9 },
+  { id: 103, title: "Ergonomic Office Chair", price: 119.00, comparePrice: 199.00, image: "https://fakestoreapi.com/img/81hj0kPdKRL._AC_UY879_.jpg", rating: 4.7 },
+  { id: 104, title: "Minimalist Backpack", price: 35.99, comparePrice: 55.00, image: "https://fakestoreapi.com/img/71zHkpOzhD._AC_UY879_.jpg", rating: 4.0 },
+  { id: 105, title: "Portable Bluetooth Speaker", price: 29.95, comparePrice: 59.95, image: "https://fakestoreapi.com/img/61ibBVAdRT._AC_UY879_.jpg", rating: 4.5 },
+];
+
+export default function FlashSaleSection() {
+  return (
+    <section className={styles.flashSaleSection}>
+      <div className="container py-5">
+        
+        {/* ═════════ SECTION HEADER ═════════ */}
+        <div className={styles.sectionHeader}>
+          <div className={styles.badgeContainer}>
+            <span className={styles.flashBadge}>⚡ Flash Sale</span>
+            <span className={styles.timeText}>Ends in 02:14:59</span>
+          </div>
+          <h2 className={styles.sectionTitle}>Today's Hot Deals</h2>
+          <p className={styles.sectionDesc}>Limited stock • Up to 50% Off</p>
+        </div>
+
+        {/* ═════════ PRODUCT GRID ═════════ */}
+        <div className={styles.productGrid}>
+          {FLASH_SALE_PRODUCTS.map((product) => (A
+            <Link key={product.id} to={`/products?search=${encodeURIComponent(product.title)}`} className={styles.cardLink}>
+              <article className={styles.card}>
+                
+                {/* ── IMAGE CONTAINER ──────────────────── */}
+                <div className={styles.imageWrapper}>
+                  <img 
+                    src={product.image} 
+                    alt={product.title} 
+                    className={styles.productImage}
+                  />
+                  
+                  {/* ── SALE BADGE ────────────────────── */}
+                  <span className={styles.saleBadge}>
+                    -{Math.round(((product.comparePrice - product.price) / product.comparePrice) * 100)}%
+                  </span>
+                </div>
+
+                {/* ── DETAILS ────────────────────────── */}
+                <div className={styles.details}>
+                  <h3 className={styles.productName}>{product.title}</h3>
+                  
+                  <div className={styles.ratingContainer}>
+                    <StarRating rate={product.rating} count={120} />
+                  </div>
+
+                  <div className={styles.prices}>
+                    <span className={styles.oldPrice}>${product.comparePrice.toFixed(2)}</span>
+                    <span className={styles.newPrice}>${formatPrice(product.price)}</span>
+                  </div>
+
+                  {/* ── BUTTON ────────────────────────── */}
+                  <button className={styles.buyBtn}>
+                    <i className="bi bi-cart-plus"></i> Buy Now
+                  </button>
+                </div>
+
+              </article>
+            </Link>
+          ))}
+        </div>
+
+      </div>
+    </section>
+  );
+}
+CODE 2
+// src/pages/Home/components/FlashSaleSection.jsx
+import { Link } from 'react-router-dom';
+import styles from '../Home.module.css';
+
+// Dummy flash sale products
+const FLASH_SALE_PRODUCTS = [
+  {
+    id: 1,
+    name: 'Premium Wireless Headphones with Noise Cancellation',
+    image: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400&h=400&fit=crop',
+    originalPrice: 199.99,
+    salePrice: 129.99,
+    rating: 4.8,
+    reviews: 1234,
+  },
+  {
+    id: 2,
+    name: 'Smart Watch Fitness Tracker with Heart Rate Monitor',
+    image: 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400&h=400&fit=crop',
+    originalPrice: 249.99,
+    salePrice: 179.99,
+    rating: 4.6,
+    reviews: 856,
+  },
+  {
+    id: 3,
+    name: 'Ultra-Thin Laptop Stand Aluminum',
+    image: 'https://images.unsplash.com/photo-1527864550417-7fd91fc51a46?w=400&h=400&fit=crop',
+    originalPrice: 49.99,
+    salePrice: 29.99,
+    rating: 4.9,
+    reviews: 2341,
+  },
+  {
+    id: 4,
+    name: 'Mechanical Gaming Keyboard RGB Backlit',
+    image: 'https://images.unsplash.com/photo-1587829741301-dc798b83add3?w=400&h=400&fit=crop',
+    originalPrice: 89.99,
+    salePrice: 59.99,
+    rating: 4.7,
+    reviews: 967,
+  },
+];
+
+export default function FlashSaleSection() {
+  return (
+    <section className={styles.flashSaleSection}>
+      <div className="container">
+        {/* Section Header */}
+        <div className={styles.flashSaleHeader}>
+          <div className="d-flex align-items-center gap-2">
+            <i className="bi bi-bolt-fill text-danger fs-3"></i>
+            <h2 className={styles.flashSaleTitle}>Today's Flash Deals</h2>
+          </div>
+          <Link to="/products" className={styles.flashSaleViewAll}>
+            View All Products <i className="bi bi-arrow-right ms-1"></i>
+          </Link>
+        </div>
+
+        {/* Products Grid */}
+        <div className={styles.flashSaleGrid}>
+          {FLASH_SALE_PRODUCTS.map((product) => (
+            <div
+              key={product.id}
+              className={styles.flashSaleCard}
+              onClick={() => window.location.href = '/products'}
+            >
+              {/* HOT SALE Badge */}
+              <div className={styles.flashSaleBadge}>
+                <i className="bi bi-fire-fill me-1"></i>
+                HOT SALE
+              </div>
+
+              {/* Product Image */}
+              <div className={styles.flashSaleImageWrap}>
+                <img
+                  src={product.image}
+                  alt={product.name}
+                  className={styles.flashSaleImage}
+                />
+              </div>
+
+              {/* Product Info */}
+              <div className={styles.flashSaleBody}>
+                <h6 className={styles.flashSaleProductName}>{product.name}</h6>
+                
+                {/* Rating */}
+                <div className="d-flex align-items-center gap-1 mb-2">
+                  <div className="d-flex gap-0.5">
+                    {[...Array(5)].map((_, i) => (
+                      <i
+                        key={i}
+                        className={`bi bi-star-fill ${i < Math.floor(product.rating) ? 'text-warning' : 'text-muted'}`}
+                        style={{ fontSize: '0.7rem' }}
+                      ></i>
+                    ))}
+                  </div>
+                  <span className="text-muted" style={{ fontSize: '0.7rem' }}>
+                    ({product.reviews})
+                  </span>
+                </div>
+
+                {/* Price */}
+                <div className={styles.flashSalePriceWrap}>
+                  <span className={styles.flashSaleOriginalPrice}>
+                    ${product.originalPrice.toFixed(2)}
+                  </span>
+                  <span className={styles.flashSaleSalePrice}>
+                    ${product.salePrice.toFixed(2)}
+                  </span>
+                </div>
+
+                {/* Add to Cart Button */}
+                <button className={styles.flashSaleAddBtn}>
+                  <i className="bi bi-cart-plus me-2"></i>
+                  Add to Cart
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+STYLE 1
+/* src/pages/Home/components/FlashSaleSection/FlashSaleSection.module.css */
+
+.flashSaleSection {
+  background: linear-gradient(180deg, #fffbf2 0%, #ffffff 100%);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+/* ── Section Header ────────────────────── */
+.sectionHeader {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.badgeContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.flashBadge {
+  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+  color: white;
+  padding: 4px 16px;
+  border-radius: 20px;
+  font-weight: 700;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+}
+
+.timeText {
+  font-size: 0.85rem;
+  color: #dc2626;
+  font-weight: 600;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.6; }
+}
+
+.sectionTitle {
+  font-size: 2rem;
+  font-weight: 800;
+  color: #1e3a8a; /* Matches Header Primary */
+  margin: 0;
+  position: relative;
+  display: inline-block;
+}
+
+.sectionTitle::after {
+  content: '';
+  position: absolute;
+  bottom: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60px;
+  height: 4px;
+  background: #f59e0b; /* Amber accent */
+  border-radius: 2px;
+}
+
+.sectionDesc {
+  color: #6b7280;
+  margin-top: 0.75rem;
+  font-size: 0.95rem;
+}
+
+/* ── Product Grid ──────────────────────── */
+.productGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1.5rem;
+}
+
+/* ── Card Link Container ───────────────── */
+.cardLink {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+}
+
+/* ── Card Style ───────────────────────── */
+.card {
+  background: #ffffff;
+  border-radius: 16px;
+  overflow: hidden;
+  border: 1px solid #f3f4f6;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  height: 100%;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 16px 32px rgba(0, 0, 0, 0.1);
+  border-color: #e5e7eb;
+}
+
+/* ── Image Wrapper ─────────────────────── */
+.imageWrapper {
+  position: relative;
+  height: 220px;
+  background: #f9fafb;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+
+.productImage {
+  max-height: 180px;
+  max-width: 100%;
+  object-fit: contain;
+  transition: transform 0.3s ease;
+}
+
+.card:hover .productImage {
+  transform: scale(1.05);
+}
+
+/* ── Sale Badge ───────────────────────── */
+.saleBadge {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  background: #ef4444;
+  color: white;
+  padding: 4px 10px;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  z-index: 10;
+}
+
+/* ── Product Details ───────────────────── */
+.details {
+  padding: 1.25rem;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.productName {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #111827;
+  margin: 0;
+  line-height: 1.4;
+  height: 2.8em; /* Two lines truncation */
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+.ratingContainer {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  height: 1.2em;
+}
+
+.prices {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+}
+
+.oldPrice {
+  color: #9ca3af;
+  font-size: 0.9rem;
+  text-decoration: line-through;
+}
+
+.newPrice {
+  color: #1e3a8a;
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
+.buyBtn {
+  margin-top: auto;
+  background: #facc15;
+  color: #1f2937;
+  border: none;
+  padding: 0.6rem 1rem;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.buyBtn:hover {
+  background: #eab308;
+}
+
+/* ── Responsive Tweaks ─────────────────── */
+@media (max-width: 576px) {
+  .productGrid {
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+  }
+  
+  .imageWrapper {
+    height: 150px;
+  }
+  
+  .productName {
+    font-size: 0.85rem;
+    height: 2.2em;
+  }
+}
+STYLE 2
+/* ═══════════════════════════════════════════════════════════════
+   ✅ FLASH SALE SECTION
+═══════════════════════════════════════════════════════════════ */
+
+.flashSaleSection {
+  padding: 4rem 0;
+  background: linear-gradient(135deg, #fff5f5 0%, #fef3f3 50%, #ffffff 100%);
+  border-top: 1px solid #fee2e2;
+  border-bottom: 1px solid #fee2e2;
+}
+
+.flashSaleHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.flashSaleTitle {
+  font-size: 2rem;
+  font-weight: 900;
+  color: #1e3a8a;
+  margin: 0;
+  letter-spacing: -0.02em;
+}
+
+.flashSaleViewAll {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.6rem 1.2rem;
+  background: #1e3a8a;
+  color: #ffffff;
+  border-radius: 50px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  transition: all 0.3s ease;
+  border: 2px solid #1e3a8a;
+}
+
+.flashSaleViewAll:hover {
+  background: #1d4ed8;
+  border-color: #1d4ed8;
+  color: #ffffff;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(30, 58, 138, 0.3);
+}
+
+.flashSaleGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1.5rem;
+}
+
+.flashSaleCard {
+  position: relative;
+  background: #ffffff;
+  border-radius: 16px;
+  overflow: hidden;
+  border: 2px solid #fee2e2;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.flashSaleCard:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 12px 32px rgba(239, 68, 68, 0.15);
+  border-color: #ef4444;
+}
+
+.flashSaleBadge {
+  position: absolute;
+  top: 12px;
+  right: -35px;
+  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+  color: #ffffff;
+  padding: 6px 40px;
+  font-size: 0.7rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  transform: rotate(45deg);
+  z-index: 10;
+  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  animation: flashPulse 2s ease-in-out infinite;
+}
+
+@keyframes flashPulse {
+  0%, 100% {
+    box-shadow: 0 4px 12px rgba(239, 68, 68, 0.4);
+  }
+  50% {
+    box-shadow: 0 4px 20px rgba(239, 68, 68, 0.7);
+  }
+}
+
+.flashSaleImageWrap {
+  position: relative;
+  height: 200px;
+  background: #f9fafb;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.flashSaleImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s ease;
+}
+
+.flashSaleCard:hover .flashSaleImage {
+  transform: scale(1.1);
+}
+
+.flashSaleBody {
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.flashSaleProductName {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #1f2937;
+  margin-bottom: 0.5rem;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  min-height: 2.7rem;
+}
+
+.flashSalePriceWrap {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.flashSaleOriginalPrice {
+  font-size: 0.85rem;
+  color: #9ca3af;
+  text-decoration: line-through;
+}
+
+.flashSaleSalePrice {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: #ef4444;
+}
+
+.flashSaleAddBtn {
+  margin-top: auto;
+  width: 100%;
+  padding: 0.6rem;
+  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+  color: #ffffff;
+  border: none;
+  border-radius: 10px;
+  font-weight: 700;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.flashSaleAddBtn:hover {
+  background: linear-gradient(135deg, #864545ff 0%, #b91c1c 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(239, 68, 68, 0.4);
+}
+
+/* 

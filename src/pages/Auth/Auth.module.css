@@ -1,0 +1,24 @@
+.page {
+  background: linear-gradient(135deg, #eff6ff 0%, #f0fdf4 100%);
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+}
+
+.card { border-radius: 20px; }
+
+.logo {
+  font-size: 2.8rem;
+  margin-bottom: 8px;
+}
+
+.submitBtn {
+  border-radius: 10px;
+  font-size: 1rem;
+  transition: all .25s ease;
+}
+
+.submitBtn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(37,99,235,.3);
+}

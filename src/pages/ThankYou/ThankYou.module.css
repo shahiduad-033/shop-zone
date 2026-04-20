@@ -1,0 +1,14 @@
+/* ── (keep all existing styles, add below) ─────────────────── */
+
+/* ✅ New account alert box */
+.newAccountAlert {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  background: #f0fdf4;
+  border: 2px solid #bbf7d0;
+  border-radius: 14px;
+  padding: 16px;
+  margin: 16px 0;
+  text-align: left;
+}

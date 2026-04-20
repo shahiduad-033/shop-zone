@@ -1,0 +1,91 @@
+.cardLink { display: block; color: inherit; }
+
+.card {
+  border-radius: 14px;
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  cursor: pointer;
+}
+
+.card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 16px 32px rgba(0,0,0,0.12) !important;
+}
+
+/* ── Badge ─────────────────────────────────────────────────── */
+.categoryBadge {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  z-index: 2;
+  background: #2563eb;
+  color: white;
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: capitalize;
+  padding: 3px 10px;
+  border-radius: 20px;
+}
+
+/* ── Image ─────────────────────────────────────────────────── */
+.imgWrap {
+  position: relative;
+  height: 210px;
+  background: #f9fafb;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  overflow: hidden;
+}
+
+.img {
+  max-height: 170px;
+  max-width: 100%;
+  object-fit: contain;
+  transition: transform 0.35s ease;
+}
+
+.card:hover .img { transform: scale(1.07); }
+
+/* ── Overlay ───────────────────────────────────────────────── */
+.overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(37, 99, 235, 0.75);
+  color: white;
+  font-weight: 600;
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.card:hover .overlay { opacity: 1; }
+
+/* ── Text ──────────────────────────────────────────────────── */
+.title {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #1f2937;
+  line-height: 1.45;
+  min-height: 2.5em;
+  margin-bottom: 6px;
+}
+
+.price {
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: #2563eb;
+}
+
+.cartBtn {
+  border-radius: 8px;
+  font-size: 0.8rem;
+  padding: 5px 12px;
+  transition: transform 0.15s ease;
+}
+
+.cartBtn:hover { transform: scale(1.05); }

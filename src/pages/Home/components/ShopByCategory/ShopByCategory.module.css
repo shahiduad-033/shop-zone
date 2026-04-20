@@ -1,0 +1,230 @@
+/* src/pages/Home/components/ShopByCategory/ShopByCategory.module.css */
+
+/* ══════════════════════════════════════════════════════════════
+   Section wrapper
+══════════════════════════════════════════════════════════════ */
+
+.section {
+  padding: 4rem 0 3.5rem;
+  background: #f9fafb;        /* subtle off-white — clean separation from hero */
+  border-bottom: 1px solid #f3f4f6;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   Section header row (title left, "View All" right)
+══════════════════════════════════════════════════════════════ */
+
+.sectionHeader {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.viewAllBtn {
+  background: none;
+  border: 1.5px solid #2563eb;
+  color: #2563eb;
+  font-size: 0.875rem;
+  font-weight: 700;
+  padding: 7px 20px;
+  border-radius: 50px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.22s ease,
+              color 0.22s ease,
+              transform 0.2s ease;
+  flex-shrink: 0;
+}
+
+.viewAllBtn:hover {
+  background: #2563eb;
+  color: #ffffff;
+  transform: translateY(-2px);
+}
+
+/* ══════════════════════════════════════════════════════════════
+   Category grid
+   — 5 columns on xl
+   — 4 columns on lg
+   — 3 columns on md (tablet landscape)
+   — 3 columns on sm (tablet portrait — no wrapping)
+   — 2 columns on xs (mobile)
+   Auto-fill keeps it responsive without breakpoint overrides
+══════════════════════════════════════════════════════════════ */
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 1.25rem;
+}
+
+@media (max-width: 1199.98px) {
+  .grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+@media (max-width: 767.98px) {
+  .grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+  }
+}
+
+@media (max-width: 479.98px) {
+  .grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.75rem;
+  }
+}
+
+/* ══════════════════════════════════════════════════════════════
+   Individual category card
+══════════════════════════════════════════════════════════════ */
+
+.card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.65rem;
+  padding: 1.4rem 0.75rem 1rem;
+  background: #ffffff;
+  border: 1.5px solid #f3f4f6;
+  border-radius: 16px;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+
+  /* Staggered pop-in using CSS variable set inline in JSX */
+  animation: categoryPopIn 0.45s ease both;
+  animation-delay: var(--delay, 0s);
+
+  /* Smooth hover transitions */
+  transition: transform 0.25s ease,
+              box-shadow 0.25s ease,
+              border-color 0.25s ease;
+}
+
+.card:hover {
+  transform: translateY(-6px) scale(1.03);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.10);
+  border-color: #e5e7eb;
+}
+
+/* Focus state for keyboard navigation */
+.card:focus-visible {
+  outline: 3px solid #2563eb;
+  outline-offset: 3px;
+}
+
+/* Pop-in entrance animation */
+@keyframes categoryPopIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* ══════════════════════════════════════════════════════════════
+   Emoji circle
+══════════════════════════════════════════════════════════════ */
+
+.iconCircle {
+  width: 68px;
+  height: 68px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  flex-shrink: 0;
+}
+
+.card:hover .iconCircle {
+  transform: scale(1.12) rotate(-4deg);
+}
+
+.emoji {
+  font-size: 2rem;
+  line-height: 1;
+  user-select: none;
+  display: block;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   Category label
+══════════════════════════════════════════════════════════════ */
+
+.label {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #1f2937;
+  text-align: center;
+  line-height: 1.3;
+  transition: color 0.22s ease;
+}
+
+.card:hover .label {
+  color: #1d4ed8;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   Accent bar (slides up on hover)
+══════════════════════════════════════════════════════════════ */
+
+.accentBar {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  border-radius: 0 0 16px 16px;
+  transform: scaleX(0);
+  transform-origin: center;
+  transition: transform 0.3s ease;
+}
+
+.card:hover .accentBar {
+  transform: scaleX(1);
+}
+
+/* ══════════════════════════════════════════════════════════════
+   Mobile: compact card adjustments
+══════════════════════════════════════════════════════════════ */
+
+@media (max-width: 479.98px) {
+  .card {
+    padding: 1rem 0.5rem 0.75rem;
+    border-radius: 12px;
+    gap: 0.5rem;
+  }
+
+  .iconCircle {
+    width: 54px;
+    height: 54px;
+  }
+
+  .emoji {
+    font-size: 1.6rem;
+  }
+
+  .label {
+    font-size: 0.75rem;
+  }
+
+  .section {
+    padding: 2.5rem 0 2rem;
+  }
+
+  .sectionHeader {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}

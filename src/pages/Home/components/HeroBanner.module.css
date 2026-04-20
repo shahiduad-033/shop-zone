@@ -1,0 +1,10 @@
+/* src/pages/Home/components/HeroBanner.module.css */
+
+/*
+ * This component uses Home.module.css (parent-level module)
+ * following the existing project convention established in
+ * all other Home sub-components.
+ *
+ * This file is intentionally minimal — add component-specific
+ * overrides here only if they must be isolated from Home.module.css.
+ */

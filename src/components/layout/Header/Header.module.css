@@ -1,0 +1,1134 @@
+/* src/components/layout/Header/Header.module.css */
+
+/* ══════════════════════════════════════════════════════════════
+   1. HEADER SHELL — UNCHANGED
+══════════════════════════════════════════════════════════════ */
+
+.header {
+  position: sticky;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1030;
+  transition: background 0.35s ease-in-out,
+              backdrop-filter 0.35s ease-in-out,
+              box-shadow 0.35s ease-in-out,
+              padding 0.35s ease-in-out,
+              border-color 0.35s ease-in-out;
+}
+
+.headerTop {
+  padding: 1rem 0;
+  background: linear-gradient(135deg, #1e3a8a 0%, #1d4ed8 100%);
+  border-bottom: 1px solid transparent;
+  box-shadow: none;
+}
+
+.headerScrolled {
+  padding: 0.55rem 0;
+  background: rgba(255, 255, 255, 0.82);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-bottom: 1px solid rgba(209, 213, 219, 0.7);
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+}
+
+.navInner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   2. BRAND — UNCHANGED
+══════════════════════════════════════════════════════════════ */
+
+.brand {
+  font-size: 1.65rem;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+  color: #ffffff;
+  flex-shrink: 0;
+  transition: color 0.35s ease-in-out;
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+}
+
+.brandScrolled { color: #1e3a8a; }
+
+.brandLogo {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: transform 0.2s ease;
+}
+
+.brand:hover .brandLogo { transform: scale(1.03); }
+
+.brandSvg {
+  width: 32px;
+  height: 36px;
+  flex-shrink: 0;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.18));
+  transition: filter 0.35s ease-in-out;
+}
+
+.brandScrolled .brandSvg {
+  filter: drop-shadow(0 1px 3px rgba(30, 58, 138, 0.2));
+}
+
+.brandText {
+  font-size: 1.5rem;
+  font-weight: 900;
+  letter-spacing: -0.5px;
+  line-height: 1;
+  font-family: system-ui, -apple-system, 'Segoe UI', sans-serif;
+}
+
+.brandHighlight {
+  color: #fbbf24;
+  transition: color 0.35s ease-in-out;
+}
+
+.brandScrolled .brandHighlight { color: #2563eb; }
+
+/* ══════════════════════════════════════════════════════════════
+   3. DESKTOP CENTER — UNCHANGED
+   (search form has been removed from this section in JSX)
+══════════════════════════════════════════════════════════════ */
+
+.desktopCenter {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.navList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.navLink {
+  display: inline-flex;
+  align-items: center;
+  padding: 7px 14px;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.92rem;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: color 0.25s ease, background 0.25s ease;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.navLink:hover {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.navLinkScrolled { color: #374151; }
+.navLinkScrolled:hover {
+  color: #1e3a8a;
+  background: rgba(37, 99, 235, 0.07);
+}
+
+.navLinkActive {
+  color: #fbbf24;
+  background: rgba(251, 191, 36, 0.15);
+}
+
+.navLinkActive:hover {
+  color: #fbbf24;
+  background: rgba(251, 191, 36, 0.2);
+}
+
+.navLinkActiveScrolled {
+  color: #1d4ed8;
+  background: rgba(29, 78, 216, 0.1);
+}
+
+.navLinkActiveScrolled:hover {
+  color: #1d4ed8;
+  background: rgba(29, 78, 216, 0.15);
+}
+
+.navLinkDropdown {
+  cursor: default;
+  user-select: none;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   4. OLD STATIC SEARCH BAR — REPLACED
+   The old .searchBar / .searchIcon / .searchBar input rules
+   are no longer needed. Section 4 now contains the new
+   expandable search panel styles.
+   The old .drawerSearch below (Section 10) is kept untouched
+   as the mobile drawer search remains static.
+══════════════════════════════════════════════════════════════ */
+
+/* ── Search trigger icon button ──────────────────────────────
+ * Reuses .iconBtn from Section 5 for base styles.
+ * These classes add the active state indicator.
+ */
+.searchTrigger {
+  /* Inherits all sizing from .iconBtn */
+  transition: color 0.25s ease,
+              background 0.25s ease,
+              transform 0.2s ease;
+}
+
+/*
+ * When search is open, the icon button gets a subtle
+ * highlight ring to show it's the "active" control.
+ */
+.searchTriggerActive {
+  background: rgba(255, 255, 255, 0.2)  !important;
+  color: #ffffff                         !important;
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.4);
+  border-radius: 50%;
+}
+
+/* Scrolled + active state */
+.headerScrolled .searchTriggerActive {
+  background: rgba(37, 99, 235, 0.1) !important;
+  color: #1d4ed8                     !important;
+  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.25);
+}
+
+/* ── Expandable search panel ─────────────────────────────────
+ *
+ * The panel sits INSIDE <header> as a direct child of <header>,
+ * below the <nav>. It is hidden by default via:
+ *   max-height: 0        → zero height (no layout space)
+ *   opacity: 0           → invisible
+ *   pointer-events: none → not interactive when closed
+ *
+ * When .searchPanelOpen is added, it animates to:
+ *   max-height: 120px    → enough for input + hint
+ *   opacity: 1           → fully visible
+ *   pointer-events: auto → interactive
+ *
+ * overflow: hidden on the base class clips the content
+ * during the height animation so nothing bleeds out.
+ */
+.searchPanel {
+  overflow: hidden;
+  max-height: 0;
+  opacity: 0;
+  pointer-events: none;
+  transition: max-height 0.38s cubic-bezier(0.4, 0, 0.2, 1),
+              opacity     0.28s ease,
+              padding     0.38s ease;
+  padding: 0;
+
+  /* Inherits background from .headerTop / .headerScrolled via parent */
+  border-top: 1px solid transparent;
+}
+
+.searchPanelOpen {
+  max-height: 120px;
+  opacity: 1;
+  pointer-events: auto;
+  padding: 0.85rem 0 1rem;
+  border-top-color: rgba(255, 255, 255, 0.15);
+}
+
+/* Border color in scrolled (glass) state */
+.headerScrolled .searchPanelOpen {
+  border-top-color: rgba(209, 213, 219, 0.5);
+}
+
+/* ── Search form inside the panel ────────────────────────── */
+.searchPanelForm {
+  display: flex;
+  align-items: center;
+  position: relative;
+  width: 100%;
+  max-width: 680px;
+  margin: 0 auto;
+  background: rgba(255, 255, 255, 0.18);
+  border: 1.5px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50px;
+  height: 46px;
+  padding: 0 8px 0 16px;
+  transition: background 0.25s ease,
+              border-color 0.25s ease,
+              box-shadow 0.25s ease;
+}
+
+.searchPanelForm:focus-within {
+  background: rgba(255, 255, 255, 0.28);
+  border-color: rgba(255, 255, 255, 0.6);
+  box-shadow: 0 0 0 3px rgba(251, 191, 36, 0.35);
+}
+
+/* Glass state form */
+.headerScrolled .searchPanelForm {
+  background: #f3f4f6;
+  border-color: #e5e7eb;
+}
+
+.headerScrolled .searchPanelForm:focus-within {
+  background: #ffffff;
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.18);
+}
+
+/* Search icon inside input */
+.searchPanelIcon {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.9rem;
+  flex-shrink: 0;
+  pointer-events: none;
+  margin-right: 10px;
+  transition: color 0.3s ease;
+}
+
+.headerScrolled .searchPanelIcon { color: #9ca3af; }
+
+/* The input field */
+.searchPanelInput {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: #ffffff;
+  height: 100%;
+  min-width: 0;
+  transition: color 0.3s ease;
+}
+
+.searchPanelInput::placeholder {
+  color: rgba(255, 255, 255, 0.55);
+  transition: color 0.3s ease;
+}
+
+.headerScrolled .searchPanelInput {
+  color: #1f2937;
+}
+
+.headerScrolled .searchPanelInput::placeholder {
+  color: #9ca3af;
+}
+
+/* Clear (×) button — shown only when input has text */
+.searchPanelClear {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(255, 255, 255, 0.2);
+  color: rgba(255, 255, 255, 0.8);
+  cursor: pointer;
+  flex-shrink: 0;
+  margin-right: 6px;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.searchPanelClear:hover {
+  background: rgba(255, 255, 255, 0.35);
+  color: #ffffff;
+}
+
+.headerScrolled .searchPanelClear {
+  background: #e5e7eb;
+  color: #6b7280;
+}
+
+.headerScrolled .searchPanelClear:hover {
+  background: #d1d5db;
+  color: #374151;
+}
+
+/* Submit button */
+.searchPanelSubmit {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0 18px;
+  height: 34px;
+  border-radius: 50px;
+  border: none;
+  background: #fbbf24;
+  color: #1f2937;
+  font-size: 0.85rem;
+  font-weight: 700;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background 0.2s ease,
+              transform 0.15s ease,
+              box-shadow 0.2s ease;
+}
+
+.searchPanelSubmit:hover {
+  background: #f59e0b;
+  transform: scale(1.03);
+  box-shadow: 0 4px 12px rgba(251, 191, 36, 0.4);
+}
+
+.headerScrolled .searchPanelSubmit {
+  background: #2563eb;
+  color: #ffffff;
+}
+
+.headerScrolled .searchPanelSubmit:hover {
+  background: #1d4ed8;
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+}
+
+/* Hint text below the form */
+.searchPanelHint {
+  text-align: center;
+  font-size: 0.72rem;
+  color: rgba(255, 255, 255, 0.5);
+  margin: 0.5rem 0 0;
+  transition: color 0.3s ease;
+}
+
+.headerScrolled .searchPanelHint { color: #9ca3af; }
+
+/* Keyboard shortcut pills */
+.searchKbd {
+  display: inline-block;
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 4px;
+  padding: 0px 5px;
+  font-size: 0.68rem;
+  font-family: monospace;
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.headerScrolled .searchKbd {
+  background: #f3f4f6;
+  border-color: #d1d5db;
+  color: #6b7280;
+}
+
+/* ── Search overlay (behind panel, above page content) ───────
+ *
+ * z-index 1028 = below .header (1030) but above page.
+ * Clicking it closes the search panel.
+ */
+.searchOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.35);
+  z-index: 1028;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
+}
+
+.searchOverlayVisible {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   5. RIGHT ACTIONS — UNCHANGED
+══════════════════════════════════════════════════════════════ */
+
+.rightActions {
+  gap: 0.25rem;
+  flex-shrink: 0;
+}
+
+.iconBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  border: none;
+  background: transparent;
+  transition: color 0.25s ease, background 0.25s ease, transform 0.2s ease;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.iconBtn:hover {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.12);
+  transform: scale(1.08);
+}
+
+.iconBtnScrolled { color: #374151; }
+.iconBtnScrolled:hover {
+  color: #1e3a8a;
+  background: rgba(37, 99, 235, 0.07);
+  transform: scale(1.08);
+}
+
+.cartIcon { position: relative; }
+
+.cartBadge {
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  min-width: 17px;
+  height: 17px;
+  padding: 0 3px;
+  background: #f59e0b;
+  color: #1f2937;
+  border-radius: 50px;
+  font-size: 0.6rem;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1.5px solid #1e3a8a;
+  line-height: 1;
+  pointer-events: none;
+}
+
+.headerScrolled .cartBadge { border-color: #ffffff; }
+
+/* ══════════════════════════════════════════════════════════════
+   6. AVATAR / PROFILE DROPDOWN — UNCHANGED
+══════════════════════════════════════════════════════════════ */
+
+.avatarWrapper { position: relative; }
+
+.avatarBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255, 255, 255, 0.12);
+  border: 1.5px solid rgba(255, 255, 255, 0.25);
+  border-radius: 50px;
+  padding: 4px 10px 4px 4px;
+  cursor: pointer;
+  transition: background 0.25s ease, border-color 0.25s ease, color 0.25s ease;
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.avatarBtn:hover { background: rgba(255, 255, 255, 0.22); }
+
+.avatarBtnScrolled {
+  background: #f3f4f6;
+  border-color: #e5e7eb;
+  color: #374151;
+}
+
+.avatarBtnScrolled:hover {
+  background: #e5e7eb;
+  border-color: #d1d5db;
+}
+
+.avatarImg {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  object-fit: cover;
+  display: block;
+}
+
+.avatarName {
+  max-width: 80px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.profileDropdown {
+  position: absolute;
+  top: calc(100% + 12px);
+  right: 0;
+  width: 260px;
+  background: #ffffff;
+  border-radius: 14px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.14);
+  border: 1px solid #f3f4f6;
+  padding: 0.5rem;
+  list-style: none;
+  margin: 0;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(8px);
+  transition: opacity 0.22s ease, visibility 0.22s ease, transform 0.22s ease;
+  z-index: 1050;
+}
+
+.avatarWrapper:hover .profileDropdown {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.profileDropdownHeader {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 0.85rem;
+  margin-bottom: 0.25rem;
+  overflow: hidden;
+  background: #f9fafb;
+  border-radius: 10px;
+}
+
+.dropdownTextBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  min-width: 0;
+  flex: 1;
+  overflow: hidden;
+}
+
+.dropdownAvatar {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.dropdownName {
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: #111827;
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.dropdownEmail {
+  font-size: 0.72rem;
+  color: #9ca3af;
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.dropdownDivider {
+  border: none;
+  border-top: 1px solid #f3f4f6;
+  margin: 0.4rem 0;
+}
+
+.profileDropdown li a,
+.profileDropdown li button {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  padding: 0.55rem 0.75rem;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #374151;
+  width: 100%;
+  background: none;
+  border: none;
+  text-align: left;
+  cursor: pointer;
+  transition: background 0.18s ease, color 0.18s ease;
+}
+
+.profileDropdown li a:hover { background: #f9fafb; color: #1d4ed8; }
+
+.dropdownBadge {
+  margin-left: auto;
+  background: #2563eb;
+  color: #fff;
+  border-radius: 50px;
+  font-size: 0.65rem;
+  font-weight: 700;
+  padding: 1px 7px;
+}
+
+.logoutBtn { color: #ef4444 !important; }
+.logoutBtn:hover {
+  background: rgba(239, 68, 68, 0.08) !important;
+  color: #ef4444 !important;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   7. MEGA MENU — UNCHANGED
+══════════════════════════════════════════════════════════════ */
+
+.megaWrapper { position: relative; }
+
+.megaMenu {
+  position: absolute;
+  top: calc(100% + 14px);
+  left: 50%;
+  transform: translateX(-50%) translateY(6px);
+  width: 660px;
+  background: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.13);
+  border: 1px solid #f3f4f6;
+  padding: 1.5rem;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.22s ease, visibility 0.22s ease, transform 0.22s ease;
+  z-index: 1050;
+}
+
+.megaWrapper:hover .megaMenu {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(-50%) translateY(0);
+}
+
+.megaGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.25rem;
+}
+
+.megaCol {}
+
+.megaColTitle {
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: #111827;
+  margin-bottom: 0.6rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid #f3f4f6;
+}
+
+.megaColList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.megaColList a {
+  font-size: 0.83rem;
+  color: #6b7280;
+  display: inline-block;
+  padding: 2px 0;
+  position: relative;
+  transition: color 0.2s ease;
+}
+
+.megaColList a::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 1.5px;
+  background: #2563eb;
+  transition: width 0.22s ease;
+}
+
+.megaColList a:hover { color: #1f2937; }
+.megaColList a:hover::after { width: 100%; }
+
+.megaViewAll {
+  display: inline-flex !important;
+  align-items: center;
+  gap: 3px;
+  font-weight: 700 !important;
+  color: #2563eb !important;
+  font-size: 0.8rem !important;
+  margin-top: 0.4rem;
+}
+
+.megaViewAll::after { display: none !important; }
+.megaViewAll:hover {
+  text-decoration: underline;
+  color: #1d4ed8 !important;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   8. AUTH BUTTONS — UNCHANGED
+══════════════════════════════════════════════════════════════ */
+
+.loginBtn {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 18px;
+  border-radius: 50px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  transition: all 0.22s ease;
+  border: 1.5px solid rgba(255, 255, 255, 0.5);
+  background: transparent;
+  color: #ffffff;
+}
+
+.loginBtn:hover {
+  background: rgba(255, 255, 255, 0.15);
+  color: #ffffff;
+}
+
+.loginBtnScrolled {
+  background: #2563eb;
+  border-color: #2563eb;
+  color: #ffffff;
+}
+
+.loginBtnScrolled:hover {
+  background: #1d4ed8;
+  border-color: #1d4ed8;
+  color: #ffffff;
+}
+
+.signupBtn {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 18px;
+  border-radius: 50px;
+  font-size: 0.875rem;
+  font-weight: 700;
+  background: #f59e0b;
+  color: #1f2937;
+  border: 1.5px solid transparent;
+  transition: all 0.22s ease;
+}
+
+.signupBtn:hover { background: #d97706; color: #1f2937; }
+
+/* ══════════════════════════════════════════════════════════════
+   9. MOBILE TOGGLE — UNCHANGED
+══════════════════════════════════════════════════════════════ */
+
+.mobileToggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 8px;
+  border: 1.5px solid rgba(255, 255, 255, 0.35);
+  background: transparent;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: color 0.25s ease, background 0.25s ease, border-color 0.25s ease;
+  color: #ffffff;
+}
+
+.mobileToggle:hover { background: rgba(255, 255, 255, 0.1); }
+
+.mobileToggleScrolled {
+  color: #374151;
+  border-color: #d1d5db;
+  background: #f9fafb;
+}
+
+.mobileToggleScrolled:hover { background: #f3f4f6; }
+
+/* ══════════════════════════════════════════════════════════════
+   10. MOBILE DRAWER — UNCHANGED
+══════════════════════════════════════════════════════════════ */
+
+.mobileOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  z-index: 1039;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.35s ease, visibility 0.35s ease;
+}
+
+.mobileOverlayVisible { opacity: 1; visibility: visible; }
+
+.mobileDrawer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: min(320px, 88vw);
+  height: 100%;
+  background: #ffffff;
+  z-index: 1040;
+  display: flex;
+  flex-direction: column;
+  transform: translateX(-100%);
+  transition: transform 0.35s cubic-bezier(0.23, 1, 0.32, 1);
+  overflow-y: auto;
+}
+
+.mobileDrawerOpen { transform: translateX(0); }
+
+.drawerHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.1rem 1.25rem;
+  border-bottom: 1px solid #f3f4f6;
+  flex-shrink: 0;
+}
+
+.drawerBrand {
+  font-size: 1.35rem;
+  font-weight: 900;
+  color: #1e3a8a;
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  letter-spacing: -0.5px;
+  text-decoration: none;
+}
+
+.drawerBrandSvg {
+  width: 26px;
+  height: 30px;
+  flex-shrink: 0;
+  color: #1e3a8a;
+}
+
+.drawerBrandHighlight { color: #2563eb; }
+
+.drawerClose {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: 1px solid #e5e7eb;
+  background: #f9fafb;
+  color: #374151;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.95rem;
+  cursor: pointer;
+}
+
+.drawerSearch {
+  display: flex;
+  align-items: center;
+  position: relative;
+  margin: 1rem 1.25rem;
+  background: #f3f4f6;
+  border: 1.5px solid #e5e7eb;
+  border-radius: 50px;
+  height: 42px;
+  padding: 0 12px;
+  flex-shrink: 0;
+}
+
+.drawerSearch:focus-within {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+}
+
+.drawerSearchIcon { color: #9ca3af; margin-right: 8px; flex-shrink: 0; }
+
+.drawerSearch input {
+  background: none;
+  border: none;
+  outline: none;
+  flex: 1;
+  font-size: 0.9rem;
+  color: #1f2937;
+}
+
+.drawerSearch input::placeholder { color: #9ca3af; }
+
+.drawerNav {
+  display: flex;
+  flex-direction: column;
+  padding: 0.5rem 1.25rem;
+  flex-shrink: 0;
+}
+
+.drawerNav a {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #111827;
+  padding: 0.7rem 0;
+  border-bottom: 1px solid #f9fafb;
+  transition: color 0.2s ease;
+}
+
+.drawerNav a:hover { color: #2563eb; }
+
+.drawerCategories { padding: 0.75rem 1.25rem; flex-shrink: 0; }
+
+.drawerSectionLabel {
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #9ca3af;
+  margin-bottom: 0.5rem;
+}
+
+.drawerCatItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.6rem 0.75rem;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #374151;
+  transition: background 0.18s ease, color 0.18s ease;
+  margin-bottom: 0.2rem;
+}
+
+.drawerCatItem:hover { background: #f0f6ff; color: #1d4ed8; }
+
+.drawerFooter {
+  margin-top: auto;
+  padding: 1.25rem;
+  border-top: 1px solid #f3f4f6;
+  flex-shrink: 0;
+}
+
+.drawerUser {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  overflow: hidden;
+}
+
+.drawerAvatar {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.drawerUserTextBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+  min-width: 0;
+  flex: 1;
+  overflow: hidden;
+}
+
+.drawerUserName {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #111827;
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.drawerUserEmail {
+  font-size: 0.75rem;
+  color: #9ca3af;
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.drawerLogout {
+  margin-left: auto;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  border: 1.5px solid #fca5a5;
+  background: #fff5f5;
+  color: #ef4444;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background 0.2s ease;
+}
+
+.drawerLogout:hover { background: #fee2e2; }
+
+.drawerAuthBtns { display: grid; gap: 0.6rem; }
+
+.drawerLoginBtn {
+  display: block;
+  text-align: center;
+  padding: 0.7rem;
+  border-radius: 50px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  border: 1.5px solid #2563eb;
+  color: #2563eb;
+  transition: all 0.2s ease;
+}
+
+.drawerLoginBtn:hover { background: #2563eb; color: #fff; }
+
+.drawerSignupBtn {
+  display: block;
+  text-align: center;
+  padding: 0.7rem;
+  border-radius: 50px;
+  font-weight: 700;
+  font-size: 0.9rem;
+  background: #f59e0b;
+  color: #1f2937;
+  transition: background 0.2s ease;
+}
+
+.drawerSignupBtn:hover { background: #d97706; color: #1f2937; }
+
+/* ── Footer classes — UNCHANGED ─────────────────────────────── */
+.footer { background: #111827; color: #9ca3af; }
+
+.colTitle {
+  color: white;
+  font-weight: 700;
+  margin-bottom: 14px;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.tagline { color: #9ca3af; font-size: 0.88rem; line-height: 1.6; }
+
+.footerLink {
+  color: #9ca3af;
+  text-decoration: none;
+  font-size: 0.88rem;
+  transition: color 0.2s ease;
+}
+
+.footerLink:hover { color: #fbbf24; }
+
+.contactList li { font-size: 0.85rem; margin-bottom: 6px; }
+
+.socialBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.08);
+  color: #9ca3af;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.socialBtn:hover {
+  background: #2563eb;
+  color: white;
+  transform: translateY(-2px);
+}
+
+.bottomBar {
+  border-color: rgba(255, 255, 255, 0.08) !important;
+  font-size: 0.82rem;
+}

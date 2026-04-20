@@ -1,0 +1,78 @@
+/* ── Shimmer keyframe ──────────────────────────────────────── */
+@keyframes shimmer {
+  0%   { background-position: -200% 0; }
+  100% { background-position:  200% 0; }
+}
+
+/* ── Shared shimmer style ──────────────────────────────────── */
+.shimmerBase {
+  background: linear-gradient(
+    90deg,
+    #f0f0f0 25%,
+    #e0e0e0 50%,
+    #f0f0f0 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: 6px;
+}
+
+/* ── Card ──────────────────────────────────────────────────── */
+.skeletonCard {
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+}
+
+/* ── Image placeholder ─────────────────────────────────────── */
+.skeletonImage {
+  composes: shimmerBase;
+  height: 220px;
+  border-radius: 0;
+}
+
+/* ── Text lines ────────────────────────────────────────────── */
+.skeletonLine {
+  composes: shimmerBase;
+  height: 13px;
+  margin-bottom: 10px;
+}
+
+.lineWide   { width: 90%; }
+.lineMid    { width: 70%; }
+.lineShort  { width: 45%; }
+.linePrice  { width: 35%; height: 20px; margin-top: 12px; }
+.lineButton { width: 100%; height: 38px; margin-top: 14px; border-radius: 8px; }
+
+/* ── Full-screen spinner ───────────────────────────────────── */
+.fullScreen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  position: fixed;
+  inset: 0;
+  background: rgba(255, 255, 255, 0.92);
+  z-index: 9999;
+}
+
+.spinner {
+  width: 52px;
+  height: 52px;
+  border: 4px solid #e5e7eb;
+  border-top-color: #2563eb;
+  border-radius: 50%;
+  animation: spin 0.75s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.spinnerText {
+  margin-top: 14px;
+  color: #6b7280;
+  font-size: 0.9rem;
+  font-weight: 500;
+}

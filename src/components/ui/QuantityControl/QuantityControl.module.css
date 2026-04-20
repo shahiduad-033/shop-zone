@@ -1,0 +1,58 @@
+.wrap {
+  display: inline-flex;
+  align-items: stretch;
+  border: 1.5px solid #d1d5db;
+  border-radius: 10px;
+  overflow: hidden;
+  background: white;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.wrap:focus-within {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37,99,235,0.15);
+}
+
+/* ── Sizes ─────────────────────────────────────────────────── */
+.sm .btn   { padding: 4px 8px; }
+.sm .input { width: 30px; font-size: 0.8rem; }
+.md .btn   { padding: 7px 11px; }
+.md .input { width: 42px; font-size: 0.9rem; }
+.lg .btn   { padding: 10px 15px; }
+.lg .input { width: 54px; font-size: 1rem; }
+
+/* ── Buttons ───────────────────────────────────────────────── */
+.btn {
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s ease;
+  font-weight: 700;
+}
+
+.btnNeutral { background: #f3f4f6; color: #374151; }
+.btnNeutral:hover:not(:disabled) { background: #2563eb; color: white; }
+
+.btnDanger  { background: #fef2f2; color: #ef4444; }
+.btnDanger:hover:not(:disabled)  { background: #ef4444; color: white; }
+
+.btn:disabled { opacity: 0.3; cursor: not-allowed; }
+.btn:active:not(:disabled) { transform: scale(0.88); }
+
+/* ── Input ─────────────────────────────────────────────────── */
+.input {
+  border: none;
+  border-inline: 1.5px solid #e5e7eb;
+  text-align: center;
+  font-weight: 700;
+  color: #111827;
+  outline: none;
+  padding: 0;
+  background: white;
+  -moz-appearance: textfield;
+}
+
+.input::-webkit-outer-spin-button,
+.input::-webkit-inner-spin-button { -webkit-appearance: none; }

@@ -1,0 +1,387 @@
+
+
+.page { background: #f9fafb; min-height: 100vh; }
+
+/* ── Step indicator ────────────────────────────────────────── */
+.steps { display: flex; align-items: center; margin-bottom: 24px; }
+
+.step  { display: flex; align-items: center; gap: 8px; }
+
+.circle {
+  width: 36px; height: 36px; border-radius: 50%;
+  background: #e5e7eb; color: #6b7280;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 700; font-size: 0.9rem;
+  transition: all .3s ease;
+}
+
+.stepOn .circle { background: #2563eb; color: white; }
+
+.line {
+  width: 80px; height: 2px;
+  background: #e5e7eb; margin: 0 8px;
+  transition: background .3s ease;
+}
+
+.lineOn { background: #2563eb; }
+
+/* ── Cards ─────────────────────────────────────────────────── */
+.formCard, .reviewCard { border-radius: 14px; overflow: hidden; }
+
+.placeBtn { border-radius: 10px; transition: all .25s ease; }
+.placeBtn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(16,185,129,.35);
+}
+
+/* ── Review order item image ───────────────────────────────── */
+.reviewImg {
+  position: relative;
+  width: 54px; height: 54px; min-width: 54px;
+  background: #f9fafb; border: 1px solid #e5e7eb;
+  border-radius: 8px; padding: 4px;
+  display: flex; align-items: center; justify-content: center;
+}
+.reviewImg img { max-width: 100%; max-height: 100%; object-fit: contain; }
+.qBadge {
+  position: absolute; top: -6px; right: -6px;
+  background: #2563eb; color: white; border-radius: 50%;
+  width: 18px; height: 18px; font-size: 0.65rem;
+  font-weight: 700; display: flex; align-items: center; justify-content: center;
+}
+
+.qBadge {
+  position: absolute; top: -6px; right: -6px;
+  background: #2563eb; color: white; border-radius: 50%;
+  width: 18px; height: 18px; font-size: 0.65rem;
+  font-weight: 700; display: flex; align-items: center; justify-content: center;
+}
+
+/* ── Order review payment badge ────────────────────────────── */
+.paymentBadge {
+  display: inline-block;
+  background: #2563eb;
+  color: #fff;
+  font-size: 0.8rem;
+  padding: 0.35em 0.85em;
+  border-radius: 2rem;
+  font-weight: 600;
+}
+
+/* ── Method info alert panels (PayPal / Bank / COD) ────────── */
+.methodInfo {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+}
+
+/* ── Card fields fade-in ────────────────────────────────────── */
+.cardFields {
+  animation: fadeSlideDown 0.22s ease forwards;
+}
+
+@keyframes fadeSlideDown {
+  from { opacity: 0; transform: translateY(-8px); }
+  to   { opacity: 1; transform: translateY(0);    }
+}
+
+/* ══════════════════════════════════════════════════════════════
+   ✅ BLOCK 2 — NEW Premium Payment Card Styles
+   All class names are unique — zero collision with Block 1
+══════════════════════════════════════════════════════════════ */
+
+/* ── Section label above the card list ─────────────────────── */
+.paySectionLabel {
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: #6b7280;
+  margin-bottom: 0.85rem;
+}
+
+/* ── Vertical card list container ──────────────────────────── */
+/*
+ * Full-width stacked layout:
+ * Each card is 100% width, cards are separated by gap.
+ * This replaces the old 2-column CSS grid.
+ */
+.payCardList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+/* ── Individual payment card ────────────────────────────────── */
+.payCard {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  width: 100%;
+  padding: 1rem 1.1rem;
+  background: #ffffff;
+  border: 2px solid #e5e7eb;
+  border-radius: 12px;
+  cursor: pointer;
+  text-align: left;
+  transition: border-color 0.2s ease,
+              box-shadow   0.2s ease,
+              background   0.2s ease,
+              transform    0.15s ease;
+  position: relative;
+  /* Remove default button styles */
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+/* Hover state — subtle lift + shadow */
+.payCard:hover {
+  border-color: #93c5fd;
+  box-shadow: 0 4px 16px rgba(37, 99, 235, 0.1);
+  background: #fafbff;
+  transform: translateY(-1px);
+}
+
+/* Focus state — keyboard accessible */
+.payCard:focus-visible {
+  outline: 3px solid #2563eb;
+  outline-offset: 2px;
+}
+
+/* ── Selected state ─────────────────────────────────────────── */
+.payCardSelected {
+  border-color: #2563eb;
+  background: #eff6ff;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12),
+              0 4px 16px rgba(37, 99, 235, 0.1);
+}
+
+.payCardSelected:hover {
+  border-color: #1d4ed8;
+  background: #eff6ff;
+  transform: translateY(-1px);
+}
+
+/* ── Left: Icon zone circle ─────────────────────────────────── */
+.payCardIconZone {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  min-width: 48px;
+  border-radius: 12px;
+  background: #f3f4f6;
+  border: 1.5px solid #e5e7eb;
+  transition: background 0.2s ease,
+              border-color 0.2s ease;
+  flex-shrink: 0;
+}
+
+/* Icon zone when card is selected */
+.payCardIconZoneSelected {
+  background: #dbeafe;
+  border-color: #93c5fd;
+}
+
+/* The icon itself */
+.payCardIcon {
+  font-size: 1.3rem;
+  color: #6b7280;
+  transition: color 0.2s ease;
+}
+
+.payCardSelected .payCardIcon {
+  color: #2563eb;
+}
+
+/* ── Center: Text content ───────────────────────────────────── */
+.payCardBody {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.18rem;
+  min-width: 0;          /* prevents flex overflow on small screens */
+}
+
+/* Title row: name + optional badge on the same line */
+.payCardTitleRow {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.payCardTitle {
+  font-size: 0.93rem;
+  font-weight: 700;
+  color: #111827;
+  line-height: 1.2;
+}
+
+/* Description (e.g. "Visa, Mastercard, Amex") */
+.payCardDesc {
+  font-size: 0.8rem;
+  color: #6b7280;
+  font-weight: 500;
+}
+
+/* Trust bullet (e.g. "Your details are encrypted") */
+.payCardBullet {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.74rem;
+  color: #9ca3af;
+  font-weight: 500;
+  margin-top: 0.1rem;
+}
+
+.bulletIcon {
+  font-size: 0.7rem;
+  flex-shrink: 0;
+  color: #6b7280;
+}
+
+/* ── Badge variants ─────────────────────────────────────────── */
+.payCardBadge {
+  display: inline-flex;
+  align-items: center;
+  font-size: 0.65rem;
+  font-weight: 700;
+  padding: 2px 9px;
+  border-radius: 50px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  line-height: 1.6;
+  flex-shrink: 0;
+}
+
+/* Primary badge (Popular) */
+.payCardBadge_primary {
+  background: #dbeafe;
+  color: #1d4ed8;
+}
+
+/* Success badge (No Fees) */
+.payCardBadge_success {
+  background: #d1fae5;
+  color: #065f46;
+}
+
+/* Warning badge (if needed) */
+.payCardBadge_warning {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+/* ── Right: Check indicator ─────────────────────────────────── */
+.payCardCheck {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 22px;
+}
+
+/* Active checkmark icon */
+.payCardCheckActive {
+  font-size: 1.15rem;
+  color: #2563eb;
+  animation: checkPop 0.2s ease both;
+}
+
+@keyframes checkPop {
+  from { transform: scale(0.5); opacity: 0; }
+  to   { transform: scale(1);   opacity: 1; }
+}
+
+/* Empty radio circle (unselected state) */
+.payCardCheckEmpty {
+  display: block;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 2px solid #d1d5db;
+  background: #f9fafb;
+  transition: border-color 0.2s ease;
+}
+
+.payCard:hover .payCardCheckEmpty {
+  border-color: #93c5fd;
+}
+
+/* ── Responsive: compact cards on small screens ─────────────── */
+@media (max-width: 480px) {
+  .payCard {
+    padding: 0.85rem 0.9rem;
+    gap: 0.75rem;
+  }
+
+  .payCardIconZone {
+    width: 40px;
+    height: 40px;
+    min-width: 40px;
+    border-radius: 10px;
+  }
+
+  .payCardIcon {
+    font-size: 1.1rem;
+  }
+
+  .payCardTitle {
+    font-size: 0.875rem;
+  }
+
+  .payCardBullet {
+    display: none;        /* hide bullet on very small screens */
+  }
+}
+
+/* ══════════════════════════════════════════════════════════════
+   ✅ NEW — Address Toggle + Edit Address Styles
+   Appended below all existing rules. Zero conflicts above.
+══════════════════════════════════════════════════════════════ */
+
+/* Locked address display box (logged-in, not editing) */
+.addressLocked {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.6rem;
+  padding: 0.75rem 1rem;
+  background: #f0f6ff;
+  border: 1.5px solid #bfdbfe;
+  border-radius: 10px;
+  margin-top: 0.5rem;
+}
+
+.addressLockedPin {
+  color: #2563eb;
+  font-size: 1rem;
+  margin-top: 2px;
+  flex-shrink: 0;
+}
+
+/* Edit address button (small, inline with label) */
+.editAddrBtn {
+  font-size: 0.75rem;
+  padding: 3px 10px;
+  border-radius: 6px;
+}
+
+/* Address editable fields fade-in */
+.addressEditFields {
+  animation: fadeSlideDown 0.2s ease forwards;
+  margin-top: 0.5rem;
+}
+
+/* Notice shown when logged-in user edits address */
+.addrSaveNotice {
+  font-size: 0.78rem;
+  color: #2563eb;
+  background: #eff6ff;
+  border: 1px solid #bfdbfe;
+  border-radius: 6px;
+  padding: 6px 12px;
+  margin: 0;
+}

@@ -1,0 +1,5 @@
+.card     { border-radius: 16px; }
+.shipBar  { background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 10px; padding: 12px; }
+.total    { color: #2563eb; }
+.cta      { border-radius: 10px; transition: all .25s ease; }
+.cta:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(37,99,235,.35); }
