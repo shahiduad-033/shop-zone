@@ -554,7 +554,7 @@ export default function Checkout() {
 
                     <button
                       type="button"
-                      className="btn btn-primary w-100 mt-4 py-3 fw-bold"
+                      className="btn btn-primary  mt-4  fw-bold justify-content-center"
                       onClick={() => validateStep1() && setStep(2)}
                       disabled={authMode === 'login' && !isAuthenticated}
                     >
@@ -704,17 +704,17 @@ export default function Checkout() {
                     )}
 
                     {/* ── Action buttons ────────────────────────────── */}
-                    <div className="d-flex gap-2 mt-4">
+                    <div className="d-flex gap-3 mt-4">
                       <button
                         type="button"
-                        className="btn btn-outline-secondary py-3 px-4"
+                        className="btn btn-outline-secondary fw-bold"style={{width:"20%", height:"40px"}}
                         onClick={() => setStep(1)}
                       >
                         ← Back
                       </button>
                       <button
-                        type="submit"
-                        className={`btn btn-success flex-grow-1 py-3 fw-bold fs-5 ${styles.placeBtn}`}
+                        type="submit" style={{width:"40%", height:"40px"}}
+                        className={`btn btn-success fw-bold   ${styles.placeBtn}` }
                         disabled={isSubmitting}
                       >
                         {isSubmitting ? (
@@ -726,12 +726,12 @@ export default function Checkout() {
                           <>
                             <FaLock className="me-2" />
                             {paymentMethod === 'cod'
-                              ? 'Place Order — Pay on Delivery'
+                              ? ' Pay on Delivery'
                               : paymentMethod === 'bank'
-                              ? 'Place Order — Pay via Bank Transfer'
+                              ? ' Pay via Bank Transfer'
                               : paymentMethod === 'paypal'
-                              ? 'Place Order — Continue to PayPal'
-                              : `Place Order — ${formatPrice(grandTotal)}`
+                              ? ' Continue to PayPal'
+                              : `  ${formatPrice(grandTotal)}`
                             }
                           </>
                         )}

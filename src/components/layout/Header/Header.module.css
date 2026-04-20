@@ -93,6 +93,14 @@
 }
 
 .brandScrolled .brandHighlight { color: #2563eb; }
+.brandInitial {
+  color: #bafb24;
+  transition: color 0.3s ease;
+}
+
+.brandScrolled .brandInitial {
+  color: #ffffff;
+}
 
 /* ══════════════════════════════════════════════════════════════
    3. DESKTOP CENTER — UNCHANGED
@@ -165,19 +173,6 @@
   user-select: none;
 }
 
-/* ══════════════════════════════════════════════════════════════
-   4. OLD STATIC SEARCH BAR — REPLACED
-   The old .searchBar / .searchIcon / .searchBar input rules
-   are no longer needed. Section 4 now contains the new
-   expandable search panel styles.
-   The old .drawerSearch below (Section 10) is kept untouched
-   as the mobile drawer search remains static.
-══════════════════════════════════════════════════════════════ */
-
-/* ── Search trigger icon button ──────────────────────────────
- * Reuses .iconBtn from Section 5 for base styles.
- * These classes add the active state indicator.
- */
 .searchTrigger {
   /* Inherits all sizing from .iconBtn */
   transition: color 0.25s ease,
@@ -185,10 +180,6 @@
               transform 0.2s ease;
 }
 
-/*
- * When search is open, the icon button gets a subtle
- * highlight ring to show it's the "active" control.
- */
 .searchTriggerActive {
   background: rgba(255, 255, 255, 0.2)  !important;
   color: #ffffff                         !important;
@@ -203,22 +194,6 @@
   box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.25);
 }
 
-/* ── Expandable search panel ─────────────────────────────────
- *
- * The panel sits INSIDE <header> as a direct child of <header>,
- * below the <nav>. It is hidden by default via:
- *   max-height: 0        → zero height (no layout space)
- *   opacity: 0           → invisible
- *   pointer-events: none → not interactive when closed
- *
- * When .searchPanelOpen is added, it animates to:
- *   max-height: 120px    → enough for input + hint
- *   opacity: 1           → fully visible
- *   pointer-events: auto → interactive
- *
- * overflow: hidden on the base class clips the content
- * during the height animation so nothing bleeds out.
- */
 .searchPanel {
   overflow: hidden;
   max-height: 0;

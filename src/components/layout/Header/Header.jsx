@@ -35,26 +35,7 @@ function ShopZoneIcon({ className }) {
   );
 }
 
-/*
- * ✅ UPDATED: CATEGORIES
- *
- * PROBLEM FIXED:
- * Old children (e.g. 'Smartphones', 'Laptops') did NOT match
- * FakeStoreAPI category slugs. Clicking them sent
- * ?category=smartphones which returns 0 results from the API.
- *
- * FakeStoreAPI has exactly 4 categories:
- *   electronics | jewelery | men's clothing | women's clothing
- *
- * NEW STRUCTURE:
- * Each top-level category maps directly to one FakeStoreAPI slug.
- * Children are display labels that all point to the SAME parent
- * API category (since FakeStoreAPI doesn't have sub-categories).
- * The "View all" link uses the exact API slug for the category filter.
- *
- * This means clicking ANY child under Electronics sends
- * ?category=electronics which returns real products.
- */
+
 const CATEGORIES = [
   {
     name:     'Electronics',
