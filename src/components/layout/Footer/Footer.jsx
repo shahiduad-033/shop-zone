@@ -88,8 +88,8 @@ export default function Footer() {
               {/* ✅ UPDATED: mystore.com → shopzone.com */}
               <li>📧 support@shopzone.com</li>
               <li>📞 +1 (234) 567-8900</li>
-              <li>🕐 Mon–Fri, 9am–6pm EST</li>
-              <li>📍 123 Main St, New York, NY</li>
+              <li>🕐 Mon–Fri, 9am–6pm</li>
+              <li>📍 123 Main St, D-I-Khan, KPK</li>
             </ul>
           </div>
 
