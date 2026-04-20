@@ -35,7 +35,7 @@
 }
 
 /* ── Review order item image ───────────────────────────────── */
-.reviewImg {
+/* .reviewImg {
   position: relative;
   width: 54px; height: 54px; min-width: 54px;
   background: #f9fafb; border: 1px solid #e5e7eb;
@@ -48,7 +48,17 @@
   background: #2563eb; color: white; border-radius: 50%;
   width: 18px; height: 18px; font-size: 0.65rem;
   font-weight: 700; display: flex; align-items: center; justify-content: center;
+} */
+
+.thumb {
+  position: relative;
+  width: 54px; height: 54px; min-width: 54px;
+  background: #f9fafb; border: 1px solid #e5e7eb;
+  border-radius: 8px; padding: 4px;
+  display: flex; align-items: center; justify-content: center;
 }
+.thumb img { max-width: 100%; max-height: 100%; object-fit: contain; }
+
 
 .qBadge {
   position: absolute; top: -6px; right: -6px;

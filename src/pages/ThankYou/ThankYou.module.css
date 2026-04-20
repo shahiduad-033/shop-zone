@@ -1,14 +1,336 @@
-/* ── (keep all existing styles, add below) ─────────────────── */
+/* ─────────────────────────────────────────────────────────────
+   ThankYou.module.css
+   Brand accent : #00a7ac
+───────────────────────────────────────────────────────────── */
 
-/* ✅ New account alert box */
+/* ── Page wrapper ────────────────────────────────────────────── */
+.page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;          /* vertical centre             */
+  justify-content: center;
+  padding: 24px 16px;
+  background: #f8fafc;          /* very light grey background  */
+}
+
+/* ── Redirect fallback ───────────────────────────────────────── */
+.redirectWrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  gap: 8px;
+}
+
+/* ── Main card ───────────────────────────────────────────────── */
+.card {
+  width: 100%;
+  max-width: 580px;             /* tight, readable width       */
+  background: #ffffff;
+  border-radius: 18px;
+  box-shadow:
+    0 4px 6px -1px rgba(0, 0, 0, 0.07),
+    0 10px 30px -5px rgba(0, 0, 0, 0.10);
+  padding: 32px 36px;           /* compact but breathable      */
+  text-align: center;
+}
+
+/* ── Animated checkmark ──────────────────────────────────────── */
+.checkWrap {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: #e6f9f9;          /* soft teal tint              */
+  margin-bottom: 14px;
+  animation: popIn 0.45s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
+}
+
+.checkIcon {
+  color: #00a7ac;               /* brand colour                */
+}
+
+@keyframes popIn {
+  0%   { transform: scale(0); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+/* ── Heading ─────────────────────────────────────────────────── */
+.heading {
+  font-size: 1.45rem;
+  font-weight: 700;
+  color: #111827;
+  margin: 0 0 6px;
+}
+
+.subheading {
+  font-size: 0.875rem;
+  color: #6b7280;
+  margin: 0 0 14px;
+  line-height: 1.5;
+}
+
+/* ── Order number badge ──────────────────────────────────────── */
+.orderBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #f0fdfd;
+  border: 1.5px solid #99e6e8;
+  border-radius: 30px;
+  padding: 5px 16px;
+  margin-bottom: 18px;
+}
+
+.orderBadgeLabel {
+  font-size: 0.75rem;
+  color: #6b7280;
+  font-weight: 500;
+}
+
+.orderBadgeValue {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #00a7ac;               /* brand colour                */
+  letter-spacing: 0.5px;
+}
+
+/* ── New-account alert ───────────────────────────────────────── */
 .newAccountAlert {
   display: flex;
   align-items: flex-start;
   gap: 10px;
   background: #f0fdf4;
-  border: 2px solid #bbf7d0;
-  border-radius: 14px;
-  padding: 16px;
-  margin: 16px 0;
+  border: 1.5px solid #bbf7d0;
+  border-radius: 12px;
+  padding: 14px;
+  margin-bottom: 18px;
   text-align: left;
+}
+
+.alertIcon {
+  color: #16a34a;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.alertBody {
+  flex: 1;
+  min-width: 0;                 /* allow text truncation       */
+}
+
+.alertTitle {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #15803d;
+  margin: 0 0 8px;
+}
+
+.credRow {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 5px;
+  flex-wrap: wrap;
+}
+
+.credLabel {
+  font-size: 0.72rem;
+  color: #6b7280;
+  min-width: 56px;
+}
+
+.credValue {
+  font-size: 0.75rem;
+  background: #f1f5f9;
+  border-radius: 4px;
+  padding: 2px 7px;
+  color: #1e293b;
+  word-break: break-all;
+}
+
+.copyBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: 1px solid #cbd5e1;
+  border-radius: 4px;
+  padding: 3px 6px;
+  cursor: pointer;
+  color: #475569;
+  transition: background 0.15s, color 0.15s;
+  flex-shrink: 0;
+}
+
+.copyBtn:hover {
+  background: #00a7ac;
+  color: #fff;
+  border-color: #00a7ac;
+}
+
+.alertFooter {
+  font-size: 0.68rem;
+  color: #9ca3af;
+  margin: 8px 0 0;
+}
+
+/* ── Details grid (2 × 2) ────────────────────────────────────── */
+.detailsGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.detailTile {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 3px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 10px 12px;
+  text-align: left;
+  transition: border-color 0.2s;
+}
+
+.detailTile:hover {
+  border-color: #00a7ac;
+}
+
+.tileIcon {
+  display: flex;
+  align-items: center;
+  margin-bottom: 2px;
+}
+
+.tileLabel {
+  font-size: 0.68rem;
+  color: #9ca3af;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+
+.tileValue {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #1e293b;
+  word-break: break-all;
+}
+
+/* ── Shipping address ────────────────────────────────────────── */
+.addrBox {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-left: 3px solid #00a7ac; /* brand accent left stripe  */
+  border-radius: 8px;
+  padding: 10px 14px;
+  text-align: left;
+  margin-bottom: 20px;
+}
+
+.addrTitle {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #374151;
+  margin: 0 0 4px;
+}
+
+.addrBody {
+  font-size: 0.78rem;
+  color: #6b7280;
+  margin: 0;
+  line-height: 1.55;
+}
+
+/* ── CTA row ─────────────────────────────────────────────────── */
+.ctaRow {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  flex-wrap: wrap;              /* wraps gracefully on mobile  */
+}
+
+/* shared button base */
+.btnOutline,
+.btnPrimary,
+.btnOutlineGreen {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  padding: 8px 18px;
+  border-radius: 8px;
+  text-decoration: none;
+  transition: background 0.2s, color 0.2s, border-color 0.2s, transform 0.15s;
+  border: 1.5px solid transparent;
+  white-space: nowrap;
+}
+
+.btnOutline:hover,
+.btnPrimary:hover,
+.btnOutlineGreen:hover {
+  transform: translateY(-1px);
+}
+
+/* Home — outline brand */
+.btnOutline {
+  color: #00a7ac;
+  border-color: #00a7ac;
+  background: transparent;
+}
+.btnOutline:hover {
+  background: #00a7ac;
+  color: #fff;
+}
+
+/* Dashboard — solid brand */
+.btnPrimary {
+  background: #00a7ac;
+  color: #fff;
+  border-color: #00a7ac;
+}
+.btnPrimary:hover {
+  background: #008f94;
+  border-color: #008f94;
+}
+
+/* Keep Shopping — outline green */
+.btnOutlineGreen {
+  color: #16a34a;
+  border-color: #16a34a;
+  background: transparent;
+}
+.btnOutlineGreen:hover {
+  background: #16a34a;
+  color: #fff;
+}
+
+/* ── Responsive: stack grid to 1 col on small screens ────────── */
+@media (max-width: 420px) {
+  .card {
+    padding: 24px 20px;
+  }
+
+  .detailsGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .ctaRow {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .btnOutline,
+  .btnPrimary,
+  .btnOutlineGreen {
+    justify-content: center;
+  }
 }

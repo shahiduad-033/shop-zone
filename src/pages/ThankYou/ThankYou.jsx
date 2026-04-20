@@ -1,19 +1,21 @@
 // src/pages/ThankYou/ThankYou.jsx
-import { useEffect, useRef }   from 'react';
+import { useEffect, useRef }        from 'react';
 import { useLocation, Link, useNavigate } from 'react-router-dom';
-import { FaCheckCircle, FaHome, FaShoppingBag,
-         FaEnvelope, FaTruck, FaKey,
-         FaUserPlus, FaTachometerAlt } from 'react-icons/fa';
-import { formatPrice }         from '../../utils/formatPrice';
-import { toast }               from 'react-toastify';
-import styles                  from './ThankYou.module.css';
+import {
+  FaCheckCircle, FaHome, FaShoppingBag,
+  FaEnvelope, FaTruck, FaKey,
+  FaUserPlus, FaTachometerAlt,
+} from 'react-icons/fa';
+import { formatPrice }              from '../../utils/formatPrice';
+import { toast }                    from 'react-toastify';
+import styles                       from './ThankYou.module.css';
 
 export default function ThankYou() {
   const { state } = useLocation();
   const navigate  = useNavigate();
   const guard     = useRef(false);
 
-  // Guard: no order data → redirect home
+  /* ── Guard: no order data → redirect home ─────────────────── */
   useEffect(() => {
     if (!state?.orderNumber && !guard.current) {
       guard.current = true;
@@ -21,141 +23,151 @@ export default function ThankYou() {
     }
   }, [state, navigate]);
 
+  /* ── Redirect fallback UI ──────────────────────────────────── */
   if (!state?.orderNumber) {
     return (
-      <div className="d-flex align-items-center justify-content-center py-5">
-        <div className="text-center">
-          <div className="spinner-border text-primary mb-3" />
-          <p className="text-muted">No order found. Redirecting…</p>
-        </div>
+      <div className={styles.redirectWrap}>
+        <div className="spinner-border text-primary mb-3" />
+        <p className="text-muted small">No order found. Redirecting…</p>
       </div>
     );
   }
 
   const {
-    orderNumber, orderTotal, shippingInfo,
-    itemCount, estimatedDelivery,
-    isNewAccount, autoPassword,    // ✅ Guest auto-registration data
+    orderNumber,
+    orderTotal,
+    shippingInfo,
+    itemCount,
+    estimatedDelivery,
+    isNewAccount,
+    autoPassword,
   } = state;
 
   const copyPassword = () => {
     navigator.clipboard.writeText(autoPassword);
-    toast.success('Password copied to clipboard!');
+    toast.success('Password copied!');
   };
+
+  /* ── Detail tiles data ─────────────────────────────────────── */
+  const details = [
+    {
+      icon  : <FaEnvelope  size={18} color="#2563eb" />,
+      label : 'Confirmation sent to',
+      value : shippingInfo.email,
+    },
+    {
+      icon  : <FaTruck     size={18} color="#10b981" />,
+      label : 'Est. Delivery',
+      value : estimatedDelivery,
+    },
+    {
+      icon  : <FaShoppingBag size={18} color="#f59e0b" />,
+      label : 'Items ordered',
+      value : `${itemCount} item${itemCount > 1 ? 's' : ''}`,
+    },
+    {
+      icon  : <span style={{ fontSize: '1rem' }}>💳</span>,
+      label : 'Total charged',
+      value : formatPrice(orderTotal),
+    },
+  ];
 
   return (
     <div className={styles.page}>
-      <div className="container py-5">
-        <div className="row justify-content-center">
-          <div className="col-lg-7">
-            <div className={`card border-0 shadow-lg text-center ${styles.card}`}>
-              <div className="card-body p-5">
+      <div className={styles.card}>
 
-                {/* Animated check */}
-                <div className={styles.checkWrap}>
-                  <FaCheckCircle className={styles.check} size={80} />
-                </div>
+        {/* ── Animated success check ───────────────────────────── */}
+        <div className={styles.checkWrap}>
+          <FaCheckCircle className={styles.checkIcon} size={52} />
+        </div>
 
-                <h2 className="fw-bold mt-4 mb-2">Order Confirmed! 🎉</h2>
-                <p className="text-muted mb-0">
-                  Thank you, <strong>{shippingInfo.firstName}</strong>!
-                  Your order has been placed successfully.
-                </p>
+        {/* ── Heading block ────────────────────────────────────── */}
+        <h2 className={styles.heading}>Order Confirmed! 🎉</h2>
+        <p className={styles.subheading}>
+          Thank you, <strong>{shippingInfo.firstName}</strong>! Your order
+          has been placed successfully.
+        </p>
 
-                {/* Order ID */}
-                <div className={styles.orderNum}>
-                  <small className="text-muted d-block">Order Number</small>
-                  <span className="fw-bold fs-5">{orderNumber}</span>
-                </div>
+        {/* ── Order number badge ───────────────────────────────── */}
+        <div className={styles.orderBadge}>
+          <span className={styles.orderBadgeLabel}>Order&nbsp;#</span>
+          <span className={styles.orderBadgeValue}>{orderNumber}</span>
+        </div>
 
-                {/*
-                 * ✅ NEW ACCOUNT ALERT
-                 * Only shown to guests who were auto-registered.
-                 * Displays their auto-generated password prominently.
-                 */}
-                {isNewAccount && autoPassword && (
-                  <div className={styles.newAccountAlert}>
-                    <FaUserPlus size={20} className="me-2 text-success" />
-                    <div className="flex-grow-1 text-start">
-                      <p className="fw-bold mb-1 small">
-                        🎉 Your account has been created!
-                      </p>
-                      <p className="text-muted mb-2 small">
-                        Use these credentials to log in and track your order:
-                      </p>
-                      <div className="d-flex align-items-center gap-2 mb-1">
-                        <span className="text-muted small">Email:</span>
-                        <code className="bg-light px-2 py-1 rounded small">
-                          {shippingInfo.email}
-                        </code>
-                      </div>
-                      <div className="d-flex align-items-center gap-2">
-                        <span className="text-muted small">Password:</span>
-                        <code className="bg-light px-2 py-1 rounded small">
-                          {autoPassword}
-                        </code>
-                        <button
-                          className="btn btn-sm btn-outline-secondary py-0 px-2"
-                          onClick={copyPassword}
-                          title="Copy password"
-                        >
-                          <FaKey size={11} />
-                        </button>
-                      </div>
-                      <p className="text-muted mt-2 mb-0"
-                         style={{ fontSize: '0.72rem' }}>
-                        ⚠️ Save this password. You can change it in your dashboard.
-                      </p>
-                    </div>
-                  </div>
-                )}
+        {/* ── New account alert (guests only) ─────────────────── */}
+        {isNewAccount && autoPassword && (
+          <div className={styles.newAccountAlert}>
+            <FaUserPlus size={18} className={styles.alertIcon} />
 
-                {/* Details grid */}
-                <div className={styles.grid}>
-                  {[
-                    { icon: <FaEnvelope color="#2563eb" size={22} />, label: 'Confirmation', value: shippingInfo.email },
-                    { icon: <FaTruck    color="#10b981" size={22} />, label: 'Est. Delivery', value: estimatedDelivery  },
-                    { icon: <FaShoppingBag color="#f59e0b" size={22}/>, label: 'Items', value: `${itemCount} item${itemCount>1?'s':''}` },
-                    { icon: <span className="fs-5">💳</span>,         label: 'Charged',  value: formatPrice(orderTotal) },
-                  ].map(({ icon, label, value }) => (
-                    <div key={label} className={styles.detailCard}>
-                      {icon}
-                      <div className="small fw-bold mt-1">{label}</div>
-                      <div className="small text-muted" style={{ wordBreak: 'break-all' }}>
-                        {value}
-                      </div>
-                    </div>
-                  ))}
-                </div>
+            <div className={styles.alertBody}>
+              <p className={styles.alertTitle}>
+                🎉 Account created — save your credentials!
+              </p>
 
-                {/* Shipping address */}
-                <div className={styles.addrBox}>
-                  <p className="small fw-bold mb-1">📦 Shipping to:</p>
-                  <p className="small text-muted mb-0">
-                    {shippingInfo.firstName} {shippingInfo.lastName}<br />
-                    {shippingInfo.address}, {shippingInfo.city}<br />
-                    {shippingInfo.state} {shippingInfo.zipCode}, {shippingInfo.country}
-                  </p>
-                </div>
-
-                {/* CTAs */}
-                <div className="d-flex gap-3 mt-4 justify-content-center flex-wrap">
-                  <Link to="/" className="btn btn-outline-primary px-4 fw-semibold">
-                    <FaHome className="me-2" />Home
-                  </Link>
-                  {/* ✅ Show dashboard link — user is now logged in */}
-                  <Link to="/dashboard" className="btn btn-primary px-4 fw-semibold">
-                    <FaTachometerAlt className="me-2" />View Dashboard
-                  </Link>
-                  <Link to="/products" className="btn btn-outline-success px-4 fw-semibold">
-                    <FaShoppingBag className="me-2" />Keep Shopping
-                  </Link>
-                </div>
-
+              <div className={styles.credRow}>
+                <span className={styles.credLabel}>Email</span>
+                <code className={styles.credValue}>{shippingInfo.email}</code>
               </div>
+
+              <div className={styles.credRow}>
+                <span className={styles.credLabel}>Password</span>
+                <code className={styles.credValue}>{autoPassword}</code>
+                <button
+                  className={styles.copyBtn}
+                  onClick={copyPassword}
+                  title="Copy password"
+                >
+                  <FaKey size={10} />
+                </button>
+              </div>
+
+              <p className={styles.alertFooter}>
+                ⚠️ Save this password — you can change it in your dashboard.
+              </p>
             </div>
           </div>
+        )}
+
+        {/* ── Details grid (2 × 2) ─────────────────────────────── */}
+        <div className={styles.detailsGrid}>
+          {details.map(({ icon, label, value }) => (
+            <div key={label} className={styles.detailTile}>
+              <span className={styles.tileIcon}>{icon}</span>
+              <span className={styles.tileLabel}>{label}</span>
+              <span className={styles.tileValue}>{value}</span>
+            </div>
+          ))}
         </div>
+
+        {/* ── Shipping address ─────────────────────────────────── */}
+        <div className={styles.addrBox}>
+          <p className={styles.addrTitle}>📦 Shipping to</p>
+          <p className={styles.addrBody}>
+            {shippingInfo.firstName} {shippingInfo.lastName}
+            &nbsp;·&nbsp;
+            {shippingInfo.address}, {shippingInfo.city},&nbsp;
+            {shippingInfo.state} {shippingInfo.zipCode}, {shippingInfo.country}
+          </p>
+        </div>
+
+        {/* ── CTA buttons ──────────────────────────────────────── */}
+        <div className={styles.ctaRow}>
+          <Link to="/" className={styles.btnOutline}>
+            <FaHome size={13} />
+            Home
+          </Link>
+
+          <Link to="/dashboard" className={styles.btnPrimary}>
+            <FaTachometerAlt size={13} />
+            Dashboard
+          </Link>
+
+          <Link to="/products" className={styles.btnOutlineGreen}>
+            <FaShoppingBag size={13} />
+            Keep Shopping
+          </Link>
+        </div>
+
       </div>
     </div>
   );
